@@ -1,0 +1,2212 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pepi Marketing Analysis Tools v3</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --color-background-primary: #e8faff;
+            --color-card-bg: #FFFFFF;
+            --color-sidebar: #F3F8FC;
+            --color-primary: #BDE2F7; /* Pastel Blue */
+            --color-marketing: #FFC89A; /* Pastel Orange */
+            --color-accent: #FFD1E6; /* Pastel Pink */
+            --color-success: #A7E3C2;
+            --color-warning: #FFE082;
+            --color-danger: #FFB3A7;
+            --color-neutral: #EAEAEA;
+            --color-hover: #FFF4EA;
+            
+            --color-text-primary: #1e293b;
+            --color-text-secondary: #64748b;
+            --color-text-tertiary: #94a3b8;
+            
+            --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+        }
+
+        body {
+            background: var(--color-background-primary);
+            color: var(--color-text-primary);
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 { font-size: 32px; font-weight: 700; color: var(--color-text-primary); }
+        h2 { font-size: 24px; font-weight: 600; color: var(--color-text-primary); }
+        h3 { font-size: 18px; font-weight: 600; color: var(--color-text-primary); }
+
+        .s {
+            background: var(--color-card-bg);
+            border: 1px solid var(--color-neutral);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+        }
+
+        .stitle {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--color-text-primary);
+        }
+
+        .stitle i, .stitle svg { color: var(--color-marketing); }
+
+        .g2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 12px;
+        }
+
+        .g3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 12px;
+        }
+
+        .g5 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 12px;
+        }
+
+        .mc {
+            background: var(--color-sidebar);
+            border-radius: 10px;
+            padding: 16px;
+            border: 1px solid var(--color-neutral);
+        }
+
+        .mcluster {
+            background: #fff;
+            border: 1px solid var(--color-neutral);
+            border-radius: 10px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sm-info { font-size: 11px; color: var(--color-text-secondary); line-height: 1.4; margin-top: 6px; display: block; opacity: 0.8; }
+
+        .ml {
+            font-size: 11px;
+            color: var(--color-text-secondary);
+            margin-bottom: 4px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .mv {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--color-text-primary);
+        }
+
+        .mv.good { color: #2D6A4F; } /* Derivative of A7E3C2 */
+        .mv.warn { color: #856404; } /* Derivative of FFE082 */
+        .mv.bad { color: #721C24; } /* Derivative of FFB3A7 */
+
+        .prow {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 16px;
+        }
+
+        .prow label {
+            font-size: 13px;
+            color: var(--color-text-secondary);
+            font-weight: 500;
+        }
+
+        @media (max-width: 768px) {
+            .prow {
+                flex-wrap: wrap;
+                gap: 12px;
+                padding: 12px;
+                background: var(--color-sidebar);
+                border-radius: 12px;
+            }
+        }
+
+        .prow input[type=range] {
+            width: 100%;
+            accent-color: var(--color-primary);
+            height: 8px;
+            margin: 4px 0;
+        }
+
+        .prow input[type=number],
+        .prow input[type=text],
+        .mutrow input[type=number] {
+            width: 120px;
+            font-size: 13px;
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: 1px solid var(--color-neutral);
+            background: #fff;
+            color: var(--color-text-primary);
+        }
+
+        .prow input:disabled {
+            opacity: 0.4;
+            background: var(--color-neutral);
+        }
+
+        .lockbtn {
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            border: 1px solid var(--color-neutral);
+            background: transparent;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            color: var(--color-text-secondary);
+            flex-shrink: 0;
+        }
+
+        .lockbtn.locked {
+            background: var(--color-warning);
+            border-color: #f0d060;
+            color: #856404;
+        }
+        .lockbtn:hover { background: var(--color-hover); }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 3px 10px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .bp {
+            background: #e1f5ee;
+            color: #085041;
+        }
+
+        .bb {
+            background: #e6f1fb;
+            color: #0c447c;
+        }
+
+        .bhi {
+            background: #fcebeb;
+            color: #791f1f;
+        }
+
+        .bme {
+            background: #faeeda;
+            color: #633806;
+        }
+
+        .blo {
+            background: #eaf3de;
+            color: #27500a;
+        }
+
+        .tabbar {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 1.25rem;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            padding: 8px 16px;
+            border-radius: 10px;
+            border: 1px solid var(--color-neutral);
+            background: #fff;
+            cursor: pointer;
+            font-size: 13px;
+            color: var(--color-text-secondary);
+            font-weight: 500;
+        }
+
+        .tab.active {
+            background: var(--color-primary);
+            color: #0c447c;
+            border-color: transparent;
+        }
+
+        .narr {
+            background: var(--color-sidebar);
+            border-radius: 8px;
+            padding: 12px 14px;
+            font-size: 13px;
+            line-height: 1.7;
+            color: var(--color-text-primary);
+            margin-bottom: 10px;
+            border-left: 4px solid var(--color-primary);
+        }
+
+        .narr.warn-alert {
+            background: #FFF0F0; /* Light version of Danger */
+            border-left-color: var(--color-danger);
+            color: #721C24;
+            font-weight: 500;
+        }
+
+        .optcard {
+            border: 1px solid var(--color-neutral);
+            border-radius: 12px;
+            padding: 12px 14px;
+            margin-bottom: 10px;
+            background: #fff;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .optcard:hover {
+            border-color: var(--color-marketing);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .optcard.rec {
+            border: 2px solid var(--color-success);
+            background: #f0fdf4;
+        }
+
+        .octl {
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .sep {
+            border: none;
+            border-top: 1px solid var(--color-neutral);
+            margin: 16px 0;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
+        }
+        @media (max-width: 480px) {
+            .metrics-grid { grid-template-columns: 1fr; }
+        }
+
+        .ctbl {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+            table-layout: fixed;
+        }
+
+        .ctbl th {
+            text-align: right;
+            padding: 8px;
+            font-weight: 700;
+            font-size: 11px;
+            color: var(--color-text-secondary);
+            border-bottom: 2px solid var(--color-neutral);
+            background: var(--color-sidebar);
+        }
+
+        .ctbl th:first-child {
+            text-align: left;
+        }
+
+        .ctbl td {
+            text-align: right;
+            padding: 8px;
+            border-bottom: 1px solid var(--color-neutral);
+            color: var(--color-text-primary);
+        }
+
+        .ctbl tr:hover td {
+            background: var(--color-hover);
+        }
+
+        .ctbl td:first-child {
+            text-align: left;
+            color: var(--color-text-secondary);
+            font-weight: 500;
+        }
+
+        .btn-action {
+            font-size: 13px;
+            padding: 10px 20px;
+            border-radius: 10px;
+            border: 1px solid var(--color-neutral);
+            background: #fff;
+            cursor: pointer;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.15s;
+        }
+
+        .btn-action:hover {
+            background: var(--color-hover);
+            border-color: var(--color-marketing);
+        }
+
+        .btn-primary {
+            background: var(--color-primary);
+            color: #0c447c;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background: #2563eb;
+        }
+
+        .rbox {
+            background: #1A1A1A;
+            border-radius: 8px;
+            padding: 14px;
+            font-size: 12px;
+            font-family: var(--font-mono);
+            line-height: 1.6;
+            white-space: pre-wrap;
+            color: #e2e8f0;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        select {
+            font-size: 13px;
+            padding: 10px 14px;
+            border-radius: 8px;
+            border: 1px solid var(--color-neutral);
+            background: #fff;
+            color: var(--color-text-primary);
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .chartarea {
+            position: relative;
+            height: 350px;
+            margin: 1rem 0;
+        }
+
+        /* Collapsible Accordion Utility */
+        .accordion-owner {
+            border: 1px solid var(--color-neutral);
+            border-radius: 12px;
+            background: #fff;
+            margin-top: 1.5rem;
+            overflow: hidden;
+        }
+
+        .accordion-trigger {
+            background: var(--color-sidebar);
+            padding: 12px 16px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--color-text-warning);
+            user-select: none;
+        }
+
+        .accordion-content {
+            padding: 1.25rem;
+            display: none;
+        }
+
+        .accordion-content.open {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1 style="margin-bottom: 2rem; display: flex; align-items: center; gap: 12px;"><i data-lucide="layout-dashboard"
+                style="color:var(--color-primary); width: 32px; height: 32px;"></i> Pepi Marketing Analysis Tools v3</h1>
+
+        <div class="s">
+            <div class="stitle"><i data-lucide="settings-2"></i> Setup & Konfigurasi Bisnis</div>
+            <div class="g2">
+                <div>
+                    <label
+                        style="font-size:12px; color:var(--color-text-secondary); display:block; margin-bottom:6px">Kategori
+                        Bisnis</label>
+                    <select id="biz-cat" onchange="applyBizPreset()">
+                        <option value="ecomm-commodity" selected>E-commerce — Commodity / Mass Market (Sembako, Gadget, Grosir)
+                        </option>
+                        <option value="ecomm-niche">E-commerce — Niche / Spesialisasi (Hobi, Onderdil Premium,
+                            Diet)</option>
+                        <option value="ecomm-premium">E-commerce — Premium / Luxury (Brand Eksklusif, Perhiasan Kustom)
+                        </option>
+                        <option value="retail-commodity">Retail Offline — Mass Market (Toko Bangunan, Sembako)</option>
+                        <option value="retail-niche">Retail Offline — Spesialis (Hobi, Butik Khusus)</option>
+                        <option value="retail-premium">Retail Offline — Premium (Luxury Goods, High-end Showroom)</option>
+                        <option value="service-relational">Jasa Profesional / Relasional (Kontraktor Konstruksi, Agensi
+                            B2B)</option>
+                    </select>
+                </div>
+                <div>
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                        <label style="font-size:12px; color:var(--color-text-secondary);">Indikator Elastisitas Sektoral
+                            Aktif</label>
+                        <label style="font-size:11px; color:var(--color-text-info); cursor:pointer;"><input
+                                type="checkbox" id="chk-custom-elast" onchange="toggleCustomElast()"> Custom
+                            Elastisitas</label>
+                    </div>
+                    <div id="elast-status-bar" class="mc" style="font-size:13px; font-weight:500; padding:9px 12px">
+                        Membaca parameter default industri...</div>
+
+                    <div id="celast-row" style="display:none; margin-top:8px" class="g2">
+                        <div><label style="font-size:11px; color:var(--color-text-secondary)">Drop Traffic% (Per +10%
+                                Harga)</label><input type="number" id="celast-t" value="5" min="0" max="100"
+                                style="width:100%" oninput="update()"></div>
+                        <div><label style="font-size:11px; color:var(--color-text-secondary)">Drop CR% (Per +10%
+                                Harga)</label><input type="number" id="celast-cr" value="8" min="0" max="100"
+                                style="width:100%" oninput="update()"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="error-alert-board" class="narr warn-alert" style="display: none;"></div>
+        <div id="price-warning" class="narr"
+            style="display: none; background: #fffbeb; border-left-color: var(--color-text-warning); color: var(--color-text-warning);">
+        </div>
+
+        <div class="g2" style="margin-bottom: 1rem; align-items: stretch;">
+            <div class="s"
+                style="margin-bottom: 0; display: flex; flex-direction: column; justify-content: space-between;">
+                <div>
+                    <div class="stitle" style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px;">
+                        <span><i data-lucide="sliders-horizontal"></i> Parameter Operasional & Marketing</span>
+                        <div style="display: flex; gap: 6px;">
+                            <button class="btn-action btn-primary" id="btn-lock-baseline" onclick="lockInitialBaseline()"
+                                style="padding: 4px 10px; font-size: 11px;">
+                                <i data-lucide="target" style="width: 14px; height: 14px;"></i> Kunci Baseline
+                            </button>
+                            <button class="btn-action" id="btn-restore-baseline" onclick="restoreToBaseline()"
+                                style="padding: 4px 10px; font-size: 11px; display: none;">
+                                <i data-lucide="rotate-ccw" style="width: 14px; height: 14px;"></i> Reset
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="prow">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                            <button class="lockbtn" id="lk-price" onclick="toggleLock('price')"><i data-lucide="lock-keyhole-open"></i></button>
+                            <label>AOV (Average Order Value) (Rp) <span id="sh-price" style="font-size:10px; color:var(--color-text-tertiary); font-weight:normal;"></span></label>
+                        </div>
+                        <input type="number" id="in-price" value="200000" min="10000" max="2000000" step="1000">
+                    </div>
+                    <input type="range" id="sl-price" min="0" max="2000000" step="1000" value="200000">
+                    <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap; margin-top:4px;">
+                        <span style="font-size:11px; color:var(--color-text-secondary); font-weight:600;">Margin</span>
+                        <div id="blended-pct-box" style="display:inline-flex; align-items:center; gap:4px; background: var(--color-sidebar); padding: 0 8px; border-radius: 6px; border: 1px solid var(--color-neutral); height: 24px;">
+                            <input type="number" id="in-blended-pct" value="15" min="1" max="99" placeholder="15" style="width:52px; font-size:11px; font-weight:bold; border:none; background:transparent; outline:none;">
+                        </div>
+                        <span style="font-size:11px; color:var(--color-text-info); font-weight:600;">%</span>
+                        <button class="tab" id="btn-cap-toggle" onclick="toggleCapMode()" style="font-size: 10px; padding: 2px 8px; height: 24px;">Izinkan HPP &gt; AOV</button>
+                    </div>
+                </div>
+
+                <div class="prow">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <button class="lockbtn" id="lk-cogs" onclick="toggleLock('cogs')"><i data-lucide="lock-keyhole-open"></i></button>
+                            <label>HPP / COGS Unit (Rp) <span id="sh-cogs" style="font-size:10px; color:var(--color-text-tertiary); font-weight:normal;"></span></label>
+                        </div>
+                        <input type="number" id="in-cogs" value="170000" min="0" max="1500000" step="1000">
+                    </div>
+                    <input type="range" id="sl-cogs" min="0" max="2000000" step="1000" value="100000">
+                </div>
+
+                <div class="prow">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <button class="lockbtn" id="lk-traffic" onclick="toggleLock('traffic')"><i data-lucide="lock-keyhole-open"></i></button>
+                            <label>Traffic Inbound <span id="sh-traffic" style="font-size:10px; color:var(--color-text-tertiary); font-weight:normal;"></span></label>
+                        </div>
+                        <input type="number" id="in-traffic" value="50000" min="100" max="10000000" step="100">
+                    </div>
+                    <input type="range" id="sl-traffic" min="100" max="500000" step="100" value="50000">
+                </div>
+
+                <div class="prow">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <button class="lockbtn" id="lk-cr" onclick="toggleLock('cr')"><i data-lucide="lock-keyhole-open"></i></button>
+                            <label>Conversion Rate (%) <span id="sh-cr" style="font-size:10px; color:var(--color-text-tertiary); font-weight:normal;"></span></label>
+                        </div>
+                        <input type="number" id="in-cr" value="3.0" min="0.1" max="100" step="0.1">
+                    </div>
+                    <input type="range" id="sl-cr" min="0.1" max="30" step="0.1" value="3.0">
+                </div>
+
+                <div class="prow">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <label>% Repeat Buyer (Retensi/bln)</label>
+                        <input type="number" id="in-ret" value="0" min="0" max="80">
+                    </div>
+                    <input type="range" id="sl-ret" min="0" max="80" step="1" value="0">
+                    <div id="ret-narr" style="font-size: 10px; color: var(--color-text-tertiary); margin-top: -4px;"></div>
+                </div>
+
+                <hr class="sep">
+                <div style="font-size:12px; font-weight:600; color:var(--color-text-secondary); margin-bottom:12px; text-transform:uppercase">
+                    Target Reverse Solver (Batas Minimal)</div>
+
+                <div class="prow">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <button class="lockbtn" id="lk-rev" onclick="toggleLock('rev')"><i data-lucide="lock-keyhole-open"></i></button>
+                            <label>Target Omset Minimal (Rp)</label>
+                        </div>
+                        <input type="text" id="in-rev" style="width:140px" placeholder="Set target...">
+                     </div>
+                    </div>
+                <div class="prow">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <button class="lockbtn" id="lk-gp" onclick="toggleLock('gp')"><i data-lucide="lock-keyhole-open"></i></button>
+                            <label>Target Gross Profit Minimal (Rp)</label>
+                        </div>
+                        <input type="text" id="in-gp" style="width:140px" placeholder="Set target...">
+                    </div>
+                </div>
+
+                <div style="margin-top: 15px; display:flex; justify-content: flex-end; gap: 8px;">
+                    <button class="btn-action" onclick="clearSavedScenarios()"><i data-lucide="trash-2" style="width:14px; height:14px;"></i> Hapus Semua
+                        </button>
+                    <button class="btn-action btn-primary" onclick="saveCurrentScenario()"><i
+                            data-lucide="bookmark" style="width:14px; height:14px;"></i> Simpan Skenario</button>
+                </div>
+            </div>
+        </div>
+
+            <div class="s"
+                style="margin-bottom: 0; display: flex; flex-direction: column; justify-content: space-between;">
+                <div>
+                    <div class="stitle"><i data-lucide="trending-up"></i> Proyeksi Sweet Spot Kurva Maksimal</div>
+                    <div class="chartarea"><canvas id="sweet-spot-chart"></canvas></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Rekap Metrik Utama: Sekarang berdiri sendiri sebagai ringkasan dashboard -->
+        <div id="main-metrics" class="g5" style="margin-bottom: 1.5rem; gap: 12px;"></div>
+
+        <div class="g2" style="margin-bottom: 1rem;">
+            <div class="s">
+                <div class="stitle"><i data-lucide="banknote"></i> Detail Biaya Finansial Pemasaran</div>
+                <div class="tabbar">
+                    <button class="tab active" id="tab-ms" onclick="switchMkt('simple')">Blended CPC</button>
+                    <button class="tab" id="tab-ma" onclick="switchMkt('adv')">Klaster Lanjutan</button>
+                </div>
+                <div id="mkt-simple">
+                    <div class="prow">
+                        <label>Average Blended CPC (Rp)</label>
+                        <input type="number" id="m-cpc" value="0" min="0">
+                    </div>
+                    <div style="font-size:11px; color:var(--color-text-tertiary); margin-top: 5px;"><i data-lucide="info" style="width:12px; height:12px; display:inline-block; vertical-align:middle;"></i> Angka biaya per klik rata-rata terhitung proporsional
+                        terhadap total traffic campuran.</div>
+                </div>
+                <div id="mkt-adv" style="display:none">
+                    <div class="g3">
+                        <div class="mcluster">
+                            <div style="font-size:11px; font-weight:700; margin-bottom:8px; color:var(--color-text-secondary)">KLASTER A: Transaksi</div>
+                            <div class="prow"><label style="width:100%">Platform Fee (%)</label><input type="number" id="m-plat" value="0" step="0.1" style="width:100%"><span class="sm-info">💡 Komisi Shopee/TikTok Shop (4-10%)</span></div>
+                            <div class="prow"><label style="width:100%">Payment Gateway (%)</label><input type="number" id="m-pgw" value="0" step="0.1" style="width:100%"><span class="sm-info">💡 Midtrans/Xendit/Website (1.5-3%)</span></div>
+                            <div class="prow"><label style="width:100%">Subsidi Ongkir (Rp)</label><input type="text" id="m-ship" value="0" style="width:100%"><span class="sm-info">💡 Gunakan untuk menaikkan Konversi (CR)</span></div>
+                        </div>
+                        <div class="mcluster">
+                            <div style="font-size:11px; font-weight:700; margin-bottom:8px; color:var(--color-text-secondary)">KLASTER B: Distribusi</div>
+                            <div class="prow">
+                                <label style="width:100%">Komisi Affiliate (%)</label>
+                                <input type="number" id="m-aff-pct" value="0" step="0.5" style="width:100%" oninput="lockAff('pct')">
+                                <span class="sm-info">💡 Cocok untuk E-commerce/B2B</span>
+                            </div>
+                            <div class="prow">
+                                <label style="width:100%">Komisi Sales Fix (Rp)</label>
+                                <input type="text" id="m-aff-fix" value="0" style="width:100%" oninput="lockAff('fix')">
+                                <span class="sm-info">💡 Cocok untuk Reseller/Sales Lapangan</span>
+                            </div>
+                            <div class="prow">
+                                <label style="width:100%">Biaya Distribusi (Rp)</label>
+                                <input type="text" id="m-dist" value="0" style="width:100%"><span class="sm-info">💡 Biaya delivery armada sendiri per unit</span></div>
+                        </div>
+                        <div class="mcluster">
+                            <div style="font-size:11px; font-weight:700; margin-bottom:8px; color:var(--color-text-secondary)">KLASTER C: Akuisisi</div>
+                            <div class="prow"><label style="width:100%">Digital Ads Spend (Rp)</label><input type="text" id="m-ads" value="0" style="width:100%"><span class="sm-info">💡 Budget Meta/Google/TikTok Ads</span></div>
+                            <div class="prow"><label style="width:100%">KOL / Event (Rp)</label><input type="text" id="m-kol" value="0" style="width:100%"><span class="sm-info">💡 Biaya endorsement/booth bulanan</span></div>
+                            
+                            <div class="mc" style="margin-top:10px; background:var(--color-sidebar); border-color:var(--color-primary); text-align:center;">
+                                <div class="ml" style="color:#0c447c">Blended ROAS</div>
+                                <div id="roas-val" class="mv" style="font-size:24px; color:#0c447c">0.0x</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="s">
+            <div class="stitle"><i data-lucide="crosshair"></i> Matriks Titik Ungkit Sektoral & Komparasi Pareto</div>
+            <div style="font-size: 12px; color: var(--color-text-secondary); margin-bottom: 12px;"
+                id="pareto-headline-bar"></div>
+
+            <div id="pareto-opts" class="g3" style="margin-bottom: 15px;"></div>
+
+            <div id="balanced-slider-container"
+                style="display:none; padding:12px; background:var(--color-background-secondary); border-radius:8px; margin-bottom:1rem;">
+                <div class="prow">
+                    <label style="font-size:12px; min-width:240px;">Alokasi Distribusi Beban Opsi C (Traffic vs CR):
+                        <span id="lbl-split-ratio" style="color:#3b82f6; font-weight:700">50/50</span></label>
+                    <input type="range" id="sl-weight-split" min="10" max="90" value="50" oninput="update()">
+                </div>
+            </div>
+
+            <div id="comp-wrap">
+                <div class="stitle"><i data-lucide="table-properties"></i> Tabel Evaluasi Komparasi Skenario</div>
+                <div style="overflow-x:auto">
+                    <table class="ctbl" id="comp-tbl"></table>
+                </div>
+            </div>
+        </div>
+
+        <div class="s">
+            <div class="stitle"><i data-lucide="sparkles"></i> Papan Strategi Rekomendasi Taktis</div>
+            <div id="advisory-alerts-zone"></div>
+        </div>
+
+        <div class="s" style="margin-top: 1.5rem;">
+            <div class="stitle"><i data-lucide="cpu"></i> Integrasi Laporan Chatbot AI (Narasi & JSON Data)
+            </div>
+            <div class="tabbar">
+                <button class="tab active" id="tab-rep-txt" onclick="switchReportTab('txt')">Format Narasi Teks</button>
+                <button class="tab" id="tab-rep-json" onclick="switchReportTab('json')">Format JSON Data Bersih</button>
+            </div>
+            <div class="rbox" id="rbox"></div>
+            <div style="display:flex; gap:8px; margin-top:10px;">
+                <button class="btn-action" onclick="copyReport()"><i data-lucide="copy" style="width:14px; height:14px;"></i> Copy Data Report</button>
+            </div>
+        </div>
+
+        <div style="font-size:11px; color:var(--color-text-tertiary); margin-top:2rem; line-height:1.6; padding:0 10px">
+            <strong>Catatan Referensi Ilmiah Terintegrasi:</strong><br>
+            [^1] <strong>Bijmolt, T. H. et al. (2005).</strong> Meta-analisis elastisitas pasar retail massal
+            bersubstitusi tinggi rata-rata mencapai −2.62.<br>
+            [^2] <strong>Choudhary, V. & Zhang, Z. (2019).</strong> Membuktikan pasar spesialis memiliki ketahanan harga
+            lebih tinggi dibanding produk massal akibat fungsional spesifik.<br>
+            [^3] <strong>Bakker, E. et al. (2021).</strong> Kurva permintaan Veblen Effect pada segmen premium bertumpu
+            kuat pada penjagaan prestise ekuitas merek.<br>
+            [^4] <strong>Tellis, G. J. (1988).</strong> Friksi kunjungan geografis toko ritel fisik bertindak sebagai
+            filter pematangan niat beli alami konsumen.
+        </div>
+
+        <!-- Owner Exclusive moved to the very bottom with minimal styling -->
+        <div class="accordion-owner" style="margin-top: 2rem; border: none; background: transparent;">
+            <div class="accordion-trigger" onclick="toggleOwnerAccordion()" style="background: transparent; padding: 4px 10px; border-top: 1px dashed var(--color-border-tertiary); min-height: auto; display: flex; justify-content: space-between;">
+                <span style="font-size: 8px; font-weight: 400; opacity: 0.4; text-transform: uppercase; letter-spacing: 0.5px;"><i data-lucide="shield-check" style="width:8px; height:8px;"></i> Sisi Owner Exclusive</span>
+            <span id="acc-chevron" style="font-size: 8px; opacity: 0.4;">▼</span>
+            </div>
+            <div class="accordion-content" id="owner-panel-content" style="padding: 1rem 0;">
+                <div class="g2" style="align-items: center;">
+                    <div class="prow">
+                        <label>Biaya Operasional Tetap / Fixed Cost (Rp)</label>
+                        <input type="number" id="in-fixed" value="30000000" min="0" step="500000">
+                    </div>
+                    <div class="mc" style="background: #fff; border: 1px solid var(--color-border-secondary);">
+                        <div class="ml" style="color:var(--color-text-warning)">Net Profit Finansial Perusahaan</div>
+                        <div id="owner-net-profit" class="mv" style="font-size: 20px;">Rp 0</div>
+                    </div>
+                </div>
+                <!-- Owner's tool advisory zone -->
+                <div id="owner-advisory-zone" style="margin-top: 15px;"></div>
+
+                <div style="margin-top: 20px; border-top: 1px solid var(--color-border-tertiary); padding-top: 15px;">
+                    <div class="stitle" style="font-size: 12px; margin-bottom: 10px;">
+                        <i data-lucide="cpu" style="width:14px; height:14px;"></i> Mega-Prompt AI: Laporan Strategis Owner (Eksklusif)
+                    </div>
+                    <div class="tabbar">
+                        <button class="tab active" id="tab-owner-rep-txt" onclick="switchOwnerReportTab('txt')" style="font-size: 10px; padding: 4px 10px;">Format Narasi Prompt</button>
+                        <button class="tab" id="tab-owner-rep-json" onclick="switchOwnerReportTab('json')" style="font-size: 10px; padding: 4px 10px;">Format JSON Owner</button>
+                    </div>
+                    <div class="rbox" id="owner-rbox" style="background: #0f172a; max-height: 250px;"></div>
+                    <button class="btn-action" onclick="copyOwnerReport()" style="font-size: 10px; margin-top: 8px;"><i data-lucide="copy" style="width:12px; height:12px;"></i> Salin Laporan Strategis Owner</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+    <script>
+        const fmt = n => 'Rp ' + Math.round(n).toLocaleString('id-ID');
+        const fmtN = n => Math.round(n).toLocaleString('id-ID');
+        const fmtP = n => n.toFixed(2) + '%';
+        const $ = id => document.getElementById(id);
+        
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Logika Mutually Exclusive untuk Komisi
+        let ownerReportFormat = 'txt';
+        function lockAff(type) {
+            if(type === 'pct') {
+                if(parseFloat($('m-aff-pct').value) > 0) {
+                    $('m-aff-fix').value = "0"; formatInputThousand($('m-aff-fix'));
+                }
+            } else {
+                if(parseFormattedNum('m-aff-fix') > 0) $('m-aff-pct').value = 0;
+            }
+            update();
+        }
+
+        // HELPER: Format input dengan pemisah ribuan (titik)
+        function formatInputThousand(element) {
+            let value = element.value.toString().replace(/\D/g, "");
+            if (value === "") { element.value = ""; return; }
+            element.value = parseInt(value, 10).toLocaleString('id-ID');
+        }
+
+        // HELPER: Mengambil angka murni dari string berformat titik
+        function parseFormattedNum(id) {
+            const val = document.getElementById(id).value.toString();
+            return parseFloat(val.replace(/\./g, '')) || 0;
+        }
+
+        // HELPER: Sinkronisasi Traffic Input dan Slider secara dinamis agar tidak mentok
+        function syncTrafficInputAndSlider(val) {
+            const sl = document.getElementById('sl-traffic');
+            const num = document.getElementById('in-traffic');
+            const MAX_ALLOWED = 10000000; // Cap absolut 10 juta traffic
+            const cleanVal = Math.max(10, Math.min(MAX_ALLOWED, Math.round(val)));
+            if (cleanVal > +sl.max) {
+                sl.max = Math.min(MAX_ALLOWED, Math.round(cleanVal * 1.2));
+            }
+            num.value = cleanVal.toLocaleString('id-ID');
+            sl.value = cleanVal;
+        }
+        
+        // HELPER: Logika distribusi beban pertumbuhan (Phased Growth: CR first -> Proportion)
+        function calcBalancedDistribution(unitsNeeded, anchorT, anchorCr, biz, splitRatio) {
+            const crNorm = biz.crNorm / 100;
+            const crMax = biz.crMax / 100;
+            const crMin = biz.crMin / 100;
+            const targetQty = unitsNeeded;
+            const currentQty = anchorT * anchorCr;
+
+            let finalT, finalCr;
+
+            if (targetQty > currentQty) {
+                // Skenario Pertumbuhan
+                // Phased Growth: Prioritas menaikkan CR dulu sampai ke angka Normal Industri sebelum naikkan Traffic
+                const qtyAtNorm = anchorT * Math.max(anchorCr, crNorm);
+                if (targetQty <= qtyAtNorm) {
+                    // Tahap 1: Target bisa dicapai hanya dengan optimasi CR menuju norm industri (Traffic tetap)
+                    finalT = anchorT;
+                    finalCr = targetQty / anchorT;
+                } else {
+                    // Tahap 2: CR sudah di atas norm industri, sisanya bagi beban antara Traffic & CR sesuai slider
+                    const extraGrowthNeeded = targetQty / qtyAtNorm;
+                    finalT = anchorT * Math.pow(extraGrowthNeeded, splitRatio);
+                    finalCr = Math.max(anchorCr, crNorm) * Math.pow(extraGrowthNeeded, 1 - splitRatio);
+                }
+            } else {
+                // Skenario Penurunan: Gunakan distribusi power split standar
+                const g = currentQty > 0 ? (targetQty / currentQty) : 1;
+                finalT = anchorT * Math.pow(g, splitRatio);
+                finalCr = anchorCr * Math.pow(g, 1 - splitRatio);
+            }
+            // Final Safety Clamping agar tetap dalam batas industri
+            if (finalCr > crMax) { finalCr = crMax; finalT = targetQty / crMax; }
+            else if (finalCr < crMin) { finalCr = crMin; finalT = targetQty / crMin; }
+            return { traffic: finalT, cr: finalCr };
+        }
+        
+        // ─── HELPER TERPUSAT: hitung unit contribution per penjualan ───────────
+        function calcUnitContribution(price, cogs, cr, retention) {
+            let vMktUnit = 0;
+            if (mktTab === 'adv') {
+                const plat = (parseFloat($('m-plat').value) || 0) / 100;
+                const pgw = (parseFloat($('m-pgw').value) || 0) / 100;
+                const affPct = (parseFloat($('m-aff-pct').value) || 0) / 100;
+                
+                // Persentase
+                vMktUnit = (plat + pgw + affPct) * price;
+                
+                // Nominal Fix
+                vMktUnit += parseFormattedNum('m-ship');
+                vMktUnit += parseFormattedNum('m-aff-fix');
+                vMktUnit += parseFormattedNum('m-dist');
+            }
+            
+            let contrib = (price - cogs - vMktUnit) * (1 + retention);
+            if (mktTab === 'simple') contrib -= (+document.getElementById('m-cpc').value || 0) / (cr > 0 ? cr : 0.01);
+            return contrib;
+        }
+
+        // ─── HELPER: hitung unitsNeeded untuk target GP ──────────────────────
+        function calcUnitsNeededForTarget(price, cogs, cr, retention, targetGP) {
+            const contrib = calcUnitContribution(price, cogs, cr, retention);
+            const adsPool = mktTab === 'adv' ? (parseFormattedNum('m-ads') + parseFormattedNum('m-kol')) : 0;
+            
+            // Proteksi: Jika kontribusi margin <= 0, target tidak mungkin dicapai dengan volume
+            if (contrib <= 0) return 0;
+            
+            return (targetGP + adsPool) / (contrib / (1 + retention));
+        }
+
+
+        // MASTER DATABASE INDUSTRI & ELASTISITAS SEKTORAL
+        const BIZ = {
+            'ecomm-commodity': { label: 'E-commerce Commodity', effortT: 'Sedang', effortCR: 'Tinggi', crNorm: 1.2, crMin: 0.1, crMax: 10.0, splitDefault: 0.70, tDrop: 15, crDrop: 18 },
+            'ecomm-niche': { label: 'E-commerce Niche', effortT: 'Tinggi', effortCR: 'Rendah', crNorm: 3.0, crMin: 0.5, crMax: 20.0, splitDefault: 0.30, tDrop: 5, crDrop: 8 },
+            'ecomm-premium': { label: 'E-commerce Premium / Luxury', effortT: 'Tinggi', effortCR: 'Tinggi', crNorm: 1.8, crMin: 0.2, crMax: 15.0, splitDefault: 0.50, tDrop: 2, crDrop: 3 },
+            'retail-commodity': { label: 'Retail Offline Mass Market', effortT: 'Tinggi', effortCR: 'Rendah', crNorm: 15.0, crMin: 2.0, crMax: 60.0, splitDefault: 0.30, tDrop: 8, crDrop: 12 },
+            'retail-niche': { label: 'Retail Offline Niche/Spesialis', effortT: 'Sedang', effortCR: 'Rendah', crNorm: 20.0, crMin: 5.0, crMax: 70.0, splitDefault: 0.40, tDrop: 4, crDrop: 6 },
+            'retail-premium': { label: 'Retail Offline Premium', effortT: 'Sedang', effortCR: 'Sedang', crNorm: 10.0, crMin: 1.0, crMax: 40.0, splitDefault: 0.50, tDrop: 2, crDrop: 3 },
+            'service-relational': { label: 'Jasa Profesional Relasional', effortT: 'Sedang', effortCR: 'Tinggi', crNorm: 5.0, crMin: 1.0, crMax: 40.0, splitDefault: 0.70, tDrop: 4, crDrop: 5 }
+        };
+        
+        // PERBAIKAN 1: Default Lock dibuka (false) di startup agar pipeline data berjalan mulus tanpa mengunci loop grafik
+        const LOCKS = { price: false, cogs: false, traffic: false, cr: false, rev: false, gp: false };
+        let lastFreeInput = 'traffic';
+        let savedScenarios = [];
+        let mktTab = 'simple';
+        let reportFormat = 'txt';
+        let sweetSpotChart = null;
+        let internalMutex = false;
+        let priceInputTimer = null;
+
+        let dynamicBaselinePrice = 200000;
+        let initialTrafficBeforeDrag = 50000;
+        let initialCrBeforeDrag = 3.0;
+
+        let isBaselineLocked = false;
+        let storedBaselineData = { price: 200000, cogs: 100000, traffic: 50000, cr: 0.03, fixed: 30000000, retention: 0, tDrop: 0.05, crDrop: 0.08 };
+
+        function lockInitialBaseline() {
+            if (isBaselineLocked) {
+                unlockInitialBaseline();
+                return;
+            }
+            const currentInputs = getRawInputs();
+            const mods = getElastModifiers();
+            const cat = document.getElementById('biz-cat').value;
+            const biz = BIZ[cat];
+
+            storedBaselineData = {
+                price: currentInputs.price,
+                cogs: currentInputs.cogs,
+                traffic: currentInputs.traffic,
+                cr: currentInputs.cr,
+                fixed: currentInputs.fixed,
+                retention: currentInputs.retention,
+                tDrop: mods.tDrop,
+                crDrop: mods.crDrop
+            };
+
+            dynamicBaselinePrice = currentInputs.price;
+            initialTrafficBeforeDrag = currentInputs.traffic;
+            initialCrBeforeDrag = currentInputs.cr * 100;
+
+            isBaselineLocked = true;
+
+            // Otomatis izinkan HPP > AOV saat baseline dikunci
+            currentCapMode = 'allow';
+            const capBtn = document.getElementById('btn-cap-toggle');
+            if (capBtn) capBtn.classList.add('active');
+
+            const slPrice = document.getElementById('sl-price');
+            const slCogs = document.getElementById('sl-cogs');
+
+            // Sinkronkan skala slider AOV dan HPP berdasarkan nilai tertinggi agar posisi visual sebanding
+            const baseVal = Math.max(currentInputs.price, currentInputs.cogs);
+            const maxVal = Math.round(baseVal * 5);
+            const stepVal = baseVal < 50000 ? 500 : 1000;
+
+            [slPrice, slCogs].forEach(s => {
+                s.min = 0;
+                s.max = maxVal;
+                s.step = stepVal;
+            });
+
+            const slTraffic = document.getElementById('sl-traffic');
+            slTraffic.min = Math.max(10, Math.round(currentInputs.traffic * 0.1));
+            slTraffic.max = Math.max(500000, Math.round(currentInputs.traffic * 10));
+            
+            const btn = document.getElementById('btn-lock-baseline');
+            btn.innerHTML = `<i data-lucide="target" style="width:14px; height:14px;"></i> Lepas Baseline`;
+            btn.style.background = `var(--color-warning)`;
+            btn.style.color = `#856404`;
+            lucide.createIcons();
+            
+            document.getElementById('btn-restore-baseline').style.display = 'inline-flex';
+            
+            update();
+        }
+
+        function unlockInitialBaseline() {
+            isBaselineLocked = false;
+
+            // Kembalikan ke mode strict saat baseline dilepas
+            currentCapMode = 'strict';
+            const capBtn = document.getElementById('btn-cap-toggle');
+            if (capBtn) capBtn.classList.remove('active');
+
+            const slPrice = document.getElementById('sl-price');
+            const slCogs = document.getElementById('sl-cogs');
+            [slPrice, slCogs].forEach(s => {
+                s.min = 0;
+                s.max = 2000000;
+                s.step = 1000;
+            });
+
+            const slTraffic = document.getElementById('sl-traffic');
+            slTraffic.min = 100;
+            slTraffic.max = 500000;
+            
+            const btn = document.getElementById('btn-lock-baseline');
+            btn.innerHTML = `<i data-lucide="target" style="width:14px; height:14px;"></i> Kunci Baseline`;
+            btn.style.background = ``;
+            btn.style.color = ``;
+            lucide.createIcons();
+            
+            document.getElementById('btn-restore-baseline').style.display = 'none';
+            
+            update();
+        }
+
+        function restoreToBaseline() {
+            if (!isBaselineLocked) return;
+
+            // Kembalikan nilai input dari data baseline yang tersimpan
+            document.getElementById('in-price').value = storedBaselineData.price;
+            document.getElementById('in-cogs').value = storedBaselineData.cogs;
+            document.getElementById('in-traffic').value = storedBaselineData.traffic;
+            document.getElementById('in-cr').value = (storedBaselineData.cr * 100).toFixed(1);
+            document.getElementById('in-fixed').value = storedBaselineData.fixed;
+            document.getElementById('in-ret').value = (storedBaselineData.retention * 100);
+
+            // Sinkronisasi slider
+            document.getElementById('sl-price').value = storedBaselineData.price;
+            document.getElementById('sl-cogs').value = storedBaselineData.cogs;
+            document.getElementById('sl-traffic').value = Math.min(500000, storedBaselineData.traffic);
+            document.getElementById('sl-cr').value = (storedBaselineData.cr * 100);
+            document.getElementById('sl-ret').value = (storedBaselineData.retention * 100);
+
+            // Format ulang ribuan agar visual tetap rapi
+            ['in-price', 'in-cogs', 'in-traffic', 'in-fixed'].forEach(id => {
+                formatInputThousand(document.getElementById(id));
+            });
+
+            // Reset benchmark internal agar kalkulasi elastisitas tidak melompat
+            resetBaselineBenchmarks();
+            
+            // Jalankan update UI menyeluruh
+            update();
+        }
+
+        function applyParetoAdjustment() {
+            const gpValue = parseFormattedNum('in-gp');
+            if (!LOCKS.gp || gpValue <= 0) return;
+
+            let { price, cogs, traffic, cr, retention } = getRawInputs();
+            const biz = BIZ[document.getElementById('biz-cat').value];
+
+            const unitsNeeded = calcUnitsNeededForTarget(price, cogs, cr, retention, gpValue);
+            let split = (+document.getElementById('sl-weight-split').value || (biz.splitDefault * 100)) / 100;
+            let dist = calcBalancedDistribution(unitsNeeded, traffic, cr, biz, split);
+
+            syncTrafficInputAndSlider(dist.traffic);
+            document.getElementById('in-cr').value = +(dist.cr * 100).toFixed(2);
+            document.getElementById('sl-cr').value = Math.min(biz.crMax, dist.cr * 100);
+
+            LOCKS.traffic = false; LOCKS.cr = false; lastFreeInput = 'traffic';
+            renderLockInterface();
+        }
+
+        function renderVisualShadowIndicators(current) {
+            if (!isBaselineLocked) {
+                document.getElementById('sh-price').textContent = "";
+                document.getElementById('sh-cogs').textContent = "";
+                document.getElementById('sh-traffic').textContent = "";
+                document.getElementById('sh-cr').textContent = "";
+                return;
+            }
+
+            const dPrice = ((current.price - storedBaselineData.price) / storedBaselineData.price * 100);
+            const dCogs = ((current.cogs - storedBaselineData.cogs) / storedBaselineData.cogs * 100);
+            const dTraffic = ((current.traffic - storedBaselineData.traffic) / storedBaselineData.traffic * 100);
+            const dCr = (((current.cr * 100) - (storedBaselineData.cr * 100)) / (storedBaselineData.cr * 100) * 100);
+
+            document.getElementById('sh-price').innerHTML = `Awal: ${fmt(storedBaselineData.price)} (${dPrice >= 0 ? '+' : ''}${dPrice.toFixed(0)}%)`;
+            document.getElementById('sh-cogs').innerHTML = `Awal: ${fmt(storedBaselineData.cogs)} (${dCogs >= 0 ? '+' : ''}${dCogs.toFixed(0)}%)`;
+            document.getElementById('sh-traffic').innerHTML = `Awal: ${fmtN(storedBaselineData.traffic)} (${dTraffic >= 0 ? '+' : ''}${dTraffic.toFixed(0)}%)`;
+            document.getElementById('sh-cr').innerHTML = `Awal: ${(storedBaselineData.cr * 100).toFixed(1)}% (${dCr >= 0 ? '+' : ''}${dCr.toFixed(0)}%)`;
+        }
+
+        function applyBizPreset() {
+            const cat = document.getElementById('biz-cat').value;
+            const biz = BIZ[cat];
+            const isCustomActive = document.getElementById('chk-custom-elast').checked;
+
+            const slCr = document.getElementById('sl-cr');
+            const inCr = document.getElementById('in-cr');
+            slCr.min = biz.crMin;
+            slCr.max = biz.crMax;
+            inCr.min = biz.crMin;
+            inCr.max = biz.crMax;
+
+            const slSplit = document.getElementById('sl-weight-split');
+            if (slSplit) {
+                slSplit.value = biz.splitDefault * 100;
+            }
+
+            if (!isCustomActive) {
+                document.getElementById('in-cr').value = biz.crNorm;
+                document.getElementById('sl-cr').value = biz.crNorm;
+            }
+
+            resetBaselineBenchmarks();
+
+            if (LOCKS.gp) {
+                applyParetoAdjustment();
+            }
+
+            update();
+        }
+
+        function toggleHppMode() {
+            const active = document.getElementById('chk-hpp-mode').checked;
+            document.getElementById('in-cogs').style.display = active ? 'none' : 'inline-block';
+            document.getElementById('sl-cogs').style.display = active ? 'none' : 'inline-block';
+            document.getElementById('blended-pct-box').style.display = active ? 'inline-flex' : 'none';
+            update();
+        }
+
+        function resetBaselineBenchmarks() {
+            if (isBaselineLocked) {
+                dynamicBaselinePrice = storedBaselineData.price;
+                initialTrafficBeforeDrag = storedBaselineData.traffic;
+                initialCrBeforeDrag = storedBaselineData.cr * 100;
+                return;
+            }
+            dynamicBaselinePrice = parseFormattedNum('in-price') || 200000;
+            initialTrafficBeforeDrag = parseFormattedNum('in-traffic') || 50000;
+            initialCrBeforeDrag = parseFloat(document.getElementById('in-cr').value) || 3.0;
+        }
+
+        function toggleCustomElast() {
+            const active = document.getElementById('chk-custom-elast').checked;
+            document.getElementById('celast-row').style.display = active ? 'flex' : 'none';
+            update();
+        }
+
+        let currentHppMode = 'pct'; // Diubah jadi 'pct' secara default agar input margin berfungsi langsung
+        let currentCapMode = 'strict'; // 'strict' or 'allow'
+
+        function toggleCapMode() {
+            currentCapMode = (currentCapMode === 'strict' ? 'allow' : 'strict');
+            const isAllow = (currentCapMode === 'allow');
+            document.getElementById('btn-cap-toggle').classList.toggle('active', isAllow);
+            
+            if (currentCapMode === 'strict') {
+                let p = parseFormattedNum('in-price');
+                let c = parseFormattedNum('in-cogs');
+            if (c > p) {
+                document.getElementById('in-price').value = c.toLocaleString('id-ID');
+                document.getElementById('sl-price').value = c;
+            }
+            }
+
+            update();
+        }
+
+        function toggleOwnerAccordion() {
+            const content = document.getElementById('owner-panel-content');
+            const chev = document.getElementById('acc-chevron');
+            content.classList.toggle('open');
+            chev.textContent = content.classList.contains('open') ? '▲' : '▼';
+        }
+
+        function toggleLock(key) {
+            if (key === 'rev' && LOCKS.gp) toggleLock('gp');
+            if (key === 'gp' && LOCKS.rev) toggleLock('rev');
+
+            LOCKS[key] = !LOCKS[key];
+
+            if (key === 'gp' && LOCKS.gp) {
+                applyParetoAdjustment();
+            }
+
+            renderLockInterface();
+            update();
+        }
+
+        function renderLockInterface() {
+            ['price', 'cogs', 'traffic', 'cr', 'rev', 'gp'].forEach(k => {
+                const btn = document.getElementById('lk-' + k);
+                if (btn) {
+                    btn.className = 'lockbtn' + (LOCKS[k] ? ' locked' : '');
+                    btn.innerHTML = LOCKS[k] ? '<i data-lucide="lock-keyhole"></i>' : '<i data-lucide="lock-keyhole-open"></i>';
+                    lucide.createIcons();
+                }
+            });
+        }
+
+        function getElastModifiers() {
+            const isCustomActive = document.getElementById('chk-custom-elast').checked;
+            if (isCustomActive) {
+                return {
+                    tDrop: (+document.getElementById('celast-t').value || 0) / 100,
+                    crDrop: (+document.getElementById('celast-cr').value || 0) / 100
+                };
+            }
+            const cat = document.getElementById('biz-cat').value;
+            const biz = BIZ[cat];
+            return { tDrop: biz.tDrop / 100, crDrop: biz.crDrop / 100 };
+        }
+
+        function getRawInputs() {
+            let price = parseFormattedNum('in-price');
+            let traffic = parseFormattedNum('in-traffic');
+            let cr = (+document.getElementById('in-cr').value || 0) / 100;
+            let fixed = parseFormattedNum('in-fixed');
+            let retention = (+document.getElementById('in-ret').value || 0) / 100;
+
+            let cogs = parseFormattedNum('in-cogs');
+            return { price, cogs, traffic, cr, fixed, retention };
+        }
+
+        function calcMetrics(price, cogs, traffic, cr, fixed, retention) {
+            const qty = traffic * cr;
+            const baseRev = qty * price;
+            const repeatQty = qty * retention;
+            const extraRev = repeatQty * price;
+
+            const totalQty = qty + repeatQty;
+            const totalRev = baseRev + extraRev;
+
+            let mktVarTotal = 0;
+            let mktFixedTotal = 0;
+
+            if (mktTab === 'simple') {
+                mktVarTotal = parseFormattedNum('m-cpc') * traffic;
+            } else {
+                const platFee = (parseFloat($('m-plat').value) || 0) / 100 * totalRev;
+                const pgwFee = (parseFloat($('m-pgw').value) || 0) / 100 * totalRev;
+                const shipSub = parseFormattedNum('m-ship') * totalQty;
+                const affPct = (parseFloat($('m-aff-pct').value) || 0) / 100 * totalRev;
+                const affFix = parseFormattedNum('m-aff-fix') * totalQty;
+                const distFee = parseFormattedNum('m-dist') * totalQty;
+                
+                mktVarTotal = platFee + pgwFee + shipSub + affPct + affFix + distFee;
+                mktFixedTotal = parseFormattedNum('m-ads') + parseFormattedNum('m-kol');
+            }
+
+            const totalMarketingCost = mktVarTotal + mktFixedTotal;
+            const totalCOGS = totalQty * cogs;
+            const grossProfit = totalRev - totalCOGS - totalMarketingCost;
+            const netProfit = grossProfit - fixed;
+                        
+            // Blended ROAS: Rev / Cluster C (Fixed acquisition spend)
+            const roas = mktFixedTotal > 0 ? (totalRev / mktFixedTotal) : 0;
+            
+            const marginPct = totalRev > 0 ? (grossProfit / totalRev * 100) : 0;
+
+             return { totalQty, totalRev, totalCOGS, mktTotal: totalMarketingCost, grossProfit, netProfit, marginPct, baseQty: qty, baseRev, roas };
+       }
+
+        function applyLiveElasticity(price, tDropFactor, crDropFactor) {
+            const warningEl = document.getElementById('price-warning');
+
+            // Hanya jalankan logika modifikasi elastisitas jika baseline sudah dikunci
+            if (!isBaselineLocked) {
+                warningEl.style.display = 'none';
+                return;
+            }
+
+            const priceRatio = price / dynamicBaselinePrice;
+            // Menghitung interval kenaikan/penurunan harga per 10%
+            const smoothedIntervals = Math.log(priceRatio) / Math.log(1.10);
+
+            if (price !== dynamicBaselinePrice) {
+                // Jika price > baseline: smoothedIntervals positif (traffic & CR turun)
+                // Jika price < baseline: smoothedIntervals negatif (traffic & CR naik)
+                
+                // Kita gunakan rumus: baseline * (1 - (intervals * dropFactor))
+                // Contoh: Jika harga turun 10%, intervals = -1. multiplier = (1 - (-1 * drop)) = 1 + drop.
+                const trafficMult = 1 - (smoothedIntervals * tDropFactor);
+                const crMult = 1 - (smoothedIntervals * crDropFactor);
+
+                // Safety clamping: traffic tidak boleh < 10, CR tidak boleh < 0.1%
+                // Dan untuk kenaikan (gain), kita batasi maksimal 3x lipat dari baseline agar realistis
+                const targetT = Math.max(10, Math.min(initialTrafficBeforeDrag * 3, Math.round(initialTrafficBeforeDrag * trafficMult)));
+                const targetCR = Math.max(0.1, Math.min(100, +(initialCrBeforeDrag * crMult).toFixed(2)));
+
+                // Hanya timpa nilai jika User sedang merubah HARGA (bukan merubah traffic/cr itu sendiri)
+                if (lastFreeInput === 'price') {
+                    syncTrafficInputAndSlider(targetT);
+                    document.getElementById('in-cr').value = targetCR;
+                    document.getElementById('sl-cr').value = Math.min(100, targetCR);
+                }
+
+                warningEl.style.display = 'block';
+                if (price > dynamicBaselinePrice) {
+                    warningEl.innerHTML = `<i class="ti ti-alert-triangle"></i> <strong>Efek Elastisitas (Penalti):</strong> Kenaikan harga +${((priceRatio - 1) * 100).toFixed(0)}% menurunkan kapasitas pasar (Traffic: -${((1 - trafficMult) * 100).toFixed(1)}% | CR: -${((1 - crMult) * 100).toFixed(1)}%).`;
+                } else {
+                    warningEl.innerHTML = `<i class="ti ti-trending-up" style="color:var(--color-text-success)"></i> <strong>Efek Elastisitas (Insentif):</strong> Penurunan harga ${((1 - priceRatio) * 100).toFixed(0)}% meningkatkan potensi pasar (Traffic: +${((trafficMult - 1) * 100).toFixed(1)}% | CR: +${((crMult - 1) * 100).toFixed(1)}%).`;
+                    warningEl.style.background = 'var(--color-background-info)';
+                    warningEl.style.borderLeftColor = 'var(--color-text-info)';
+                    warningEl.style.color = 'var(--color-text-info)';
+                }
+            } else {
+                warningEl.style.display = 'none';
+            }
+        }
+
+        function solveConstraints() {
+            let { price, cogs, traffic, cr, fixed, retention } = getRawInputs();
+            const tRev = LOCKS.rev ? parseFormattedNum('in-rev') : null;
+            const tGP = LOCKS.gp ? parseFormattedNum('in-gp') : null;
+
+            if (!tRev && !tGP) return;
+
+            const biz = BIZ[document.getElementById('biz-cat').value];
+            const crMin = biz.crMin / 100, crMax = biz.crMax / 100;
+
+            const currentMetrics = calcMetrics(price, cogs, traffic, cr, fixed, retention);
+            if (tRev !== null && currentMetrics.totalRev >= tRev) return;
+            if (tGP !== null && currentMetrics.grossProfit >= tGP) return;
+
+            // Proteksi Margin Kontribusi
+            const unitContrib = calcUnitContribution(price, cogs, cr, retention);
+            if (unitContrib <= 0 && tGP !== null) return;
+
+            let unitsNeeded = 0;
+            if (tRev !== null && tRev > 0) {
+                const totalPerUnit = price * (1 + retention);
+                if (totalPerUnit <= 0) return;
+                unitsNeeded = tRev / totalPerUnit;
+            } else if (tGP !== null && tGP > 0) {
+                unitsNeeded = calcUnitsNeededForTarget(price, cogs, cr, retention, tGP);
+            }
+
+            if (unitsNeeded <= 0) return;
+
+            let finalTraffic = traffic, finalCr = cr;
+
+            if (lastFreeInput === 'cr') {
+                finalTraffic = cr > 0 ? (unitsNeeded / cr) : 0;
+                const maxT = +document.getElementById('sl-traffic').max || 500000;
+                if (finalTraffic > maxT) finalTraffic = maxT;
+            } else if (lastFreeInput === 'traffic') {
+                finalCr = traffic > 0 ? (unitsNeeded / traffic) : 0;
+                if (finalCr > crMax) { finalCr = crMax; finalTraffic = crMax > 0 ? (unitsNeeded / crMax) : 0; }
+                else if (finalCr < crMin) { finalCr = crMin; finalTraffic = crMin > 0 ? (unitsNeeded / crMin) : 0; }
+            } else {
+                let anchorTraffic = isBaselineLocked ? storedBaselineData.traffic : initialTrafficBeforeDrag;
+                let anchorCr = isBaselineLocked ? storedBaselineData.cr : (initialCrBeforeDrag / 100);
+                let splitRatio = (+document.getElementById('sl-weight-split').value || (biz.splitDefault * 100)) / 100;
+                let dist = calcBalancedDistribution(unitsNeeded, anchorTraffic, anchorCr, biz, splitRatio);
+                finalTraffic = dist.traffic; finalCr = dist.cr;
+            }
+
+            syncTrafficInputAndSlider(finalTraffic);
+            document.getElementById('in-cr').value = +(finalCr * 100).toFixed(2);
+            document.getElementById('sl-cr').value = Math.min(biz.crMax, finalCr * 100);
+        }
+
+        function update() {
+            if (internalMutex) return;
+            internalMutex = true;
+
+            const cat = document.getElementById('biz-cat').value;
+            const biz = BIZ[cat];
+            const mods = getElastModifiers();
+
+            const isCustomActive = document.getElementById('chk-custom-elast').checked;
+            document.getElementById('elast-status-bar').textContent = isCustomActive ?
+                `Custom Sektoral (Drop Traffic: -${(mods.tDrop * 100).toFixed(0)}% | Drop CR: -${(mods.crDrop * 100).toFixed(0)}%)` :
+                `${biz.label} (Default Industri: Drop Traffic -${biz.tDrop}% | Drop CR -${biz.crDrop}%)`;
+
+            const currentPrice = parseFormattedNum('in-price');
+            let currentCogs = parseFormattedNum('in-cogs');
+            const blendedPctEl = $('in-blended-pct');
+            const cogsEl = $('in-cogs');
+            const slCogsEl = $('sl-cogs');
+            
+            if (lastFreeInput === 'margin') {
+                const targetPct = parseFloat(blendedPctEl.value) || 0;
+                currentCogs = currentPrice * (1 - (targetPct / 100));
+                LOCKS.cogs = true;
+                renderLockInterface();
+                cogsEl.value = Math.round(currentCogs).toLocaleString('id-ID');
+                slCogsEl.value = Math.round(currentCogs);
+            } else {
+                const currentMargin = currentPrice > 0 ? (1 - (currentCogs / currentPrice)) * 100 : 0;
+                blendedPctEl.value = currentMargin.toFixed(1);
+            }
+
+            if (!checkValidationEngine(currentPrice, currentCogs)) { internalMutex = false; return; }
+
+            applyLiveElasticity(currentPrice, getElastModifiers().tDrop, getElastModifiers().crDrop);
+            solveConstraints();
+
+            const inputs = getRawInputs();
+            
+            const m = calcMetrics(inputs.price, inputs.cogs, inputs.traffic, inputs.cr, inputs.fixed, inputs.retention);
+
+            document.getElementById('main-metrics').innerHTML = `
+                <div class="mc"><div class="ml">Total Volume Jual</div><div class="mv">${fmtN(m.totalQty)} Unit</div></div>
+                <div class="mc"><div class="ml">Revenue Omset</div><div class="mv">${fmt(m.totalRev)}</div></div>
+                <div class="mc"><div class="ml" style="color:var(--color-text-success)">Gross Profit Tim</div><div class="mv good">${fmt(m.grossProfit)}</div></div>
+                <div class="mc"><div class="ml">Margin Operasional</div><div class="mv">${fmtP(m.marginPct)}</div></div>
+                <div class="mc"><div class="ml">Biaya Marketing</div><div class="mv warn">${fmt(m.mktTotal)}</div></div>
+            `;
+
+            // Visual Feedback pada Slider
+            const isLoss = inputs.cogs > inputs.price;
+            const slPrice = $('sl-price');
+            const slCogs = $('sl-cogs');
+            if (isLoss) {
+                slPrice.style.accentColor = 'var(--color-text-danger)';
+                slCogs.style.accentColor = 'var(--color-text-danger)';
+            } else {
+                slPrice.style.accentColor = '#3b82f6';
+                slCogs.style.accentColor = '#3b82f6';
+            }
+            
+            $('roas-val').textContent = m.roas.toFixed(1) + 'x';
+            
+            const ownerNetProfitEl = $('owner-net-profit');
+            ownerNetProfitEl.textContent = fmt(m.netProfit);
+            ownerNetProfitEl.className = m.netProfit < 0 ? 'mv bad' : 'mv good';
+
+            renderVisualShadowIndicators(inputs);
+
+            // PERBAIKAN 2: Penyaluran parameter murni aman tanpa interupsi loop DOM
+            updateSweetSpotChart(inputs.price, inputs.cogs, inputs.traffic, inputs.cr, inputs.fixed, inputs.retention, mods.tDrop, mods.crDrop);
+
+            renderParetoSection(inputs, m, biz);
+            renderComparisonTable(inputs.price, inputs.cogs, inputs.traffic, inputs.cr, m);
+            renderContextualTips(inputs, m, biz);
+            renderReportOutput(inputs, m, biz);
+
+            internalMutex = false;
+
+            // Update Narasi Retensi Singkat
+            const retVal = inputs.retention * 100;
+            const retNarr = document.getElementById('ret-narr');
+            if (retVal > 0) retNarr.textContent = `Efek LTV: +${retVal.toFixed(0)}% volume transaksi dari pelanggan lama.`;
+            else retNarr.textContent = "";
+        }
+
+        function updateSweetSpotChart(price, cogs, traffic, cr, fixed, retention, tDrop, crDrop) {
+            const pricePoints = [];
+            const profitPoints = [];
+            const baseProfitPoints = [];
+
+             const currentCogs = cogs; // COGS statis untuk simulasi sweet spot
+
+            for (let i = -4; i <= 4; i++) {
+                const factor = 1 + (i * 0.08);
+                const testPrice = price * factor;
+                let testTraffic = traffic;
+                let testCR = cr;
+
+                const testCogs = currentCogs; // HPP tidak berubah saat mensimulasikan harga di grafik
+
+
+                if (testPrice > dynamicBaselinePrice) {
+                    const priceRatio = testPrice / dynamicBaselinePrice;
+                    const smoothedIntervals = Math.log(priceRatio) / Math.log(1.10);
+
+                    testTraffic = traffic * (1 - Math.min(0.95, smoothedIntervals * tDrop));
+                    testCR = cr * (1 - Math.min(0.95, smoothedIntervals * crDrop));
+                }
+
+                const gp = calcMetrics(testPrice, testCogs, Math.max(10, testTraffic), Math.max(0.001, testCR), fixed, retention).grossProfit;
+                pricePoints.push(Math.round(testPrice).toLocaleString('id-ID'));
+                profitPoints.push(gp);
+
+                if (isBaselineLocked) {
+                    let baseTraffic = storedBaselineData.traffic;
+                    let baseCR = storedBaselineData.cr;
+                    const baseCogs = storedBaselineData.cogs; // Baseline HPP juga statis
+
+                    if (testPrice > storedBaselineData.price) {
+                        const priceRatio = testPrice / storedBaselineData.price;
+                        const smoothedIntervals = Math.log(priceRatio) / Math.log(1.10);
+
+                        baseTraffic = storedBaselineData.traffic * (1 - Math.min(0.95, smoothedIntervals * storedBaselineData.tDrop));
+                        baseCR = storedBaselineData.cr * (1 - Math.min(0.95, smoothedIntervals * storedBaselineData.crDrop));
+                    }
+                    const baseGpVal = calcMetrics(testPrice, baseCogs, Math.max(10, baseTraffic), Math.max(0.001, baseCR), storedBaselineData.fixed, storedBaselineData.retention).grossProfit;
+                    baseProfitPoints.push(baseGpVal);
+                }
+            }
+
+            const datasets = [
+                {
+                    label: 'Profit Skenario Aktif',
+                    data: profitPoints,
+                    borderColor: '#3b82f6',
+                    backgroundColor: 'rgba(59, 130, 246, 0.06)',
+                    fill: true,
+                    tension: 0.2,
+                    pointRadius: [3, 3, 3, 3, 6, 3, 3, 3, 3],
+                    pointBackgroundColor: ['#3b82f6', '#3b82f6', '#3b82f6', '#3b82f6', '#2563eb', '#3b82f6', '#3b82f6', '#3b82f6', '#3b82f6']
+                }
+            ];
+
+            if (isBaselineLocked) {
+                datasets.push({
+                    label: 'Profit Baseline Terkunci',
+                    data: baseProfitPoints,
+                    borderColor: '#94a3b8',
+                    backgroundColor: 'transparent',
+                    fill: false,
+                    tension: 0.2,
+                    pointRadius: 0,
+                    borderDash: [5, 5]
+                });
+            }
+
+            if (!sweetSpotChart) {
+                const ctx = document.getElementById('sweet-spot-chart').getContext('2d');
+                sweetSpotChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: pricePoints,
+                        datasets: datasets
+                    },
+                    options: {
+                        responsive: true, maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: isBaselineLocked },
+                            verticalLines: true
+                        },
+                        scales: {
+                            y: { ticks: { callback: v => 'Rp ' + v.toLocaleString('id-ID') }, grid: { color: 'rgba(0,0,0,0.03)' } },
+                            x: { grid: { display: false } }
+                        }
+                    },
+                    plugins: [{
+                        id: 'verticalLines',
+                        afterDraw: (chart) => {
+                            const ctx = chart.ctx;
+                            const xAxis = chart.scales.x;
+                            const yAxis = chart.scales.y;
+
+                            const currentX = xAxis.getPixelForTick(4);
+                            ctx.save();
+                            ctx.beginPath();
+                            ctx.strokeStyle = 'rgba(59, 130, 246, 0.4)';
+                            ctx.lineWidth = 1.5;
+                            ctx.moveTo(currentX, yAxis.top);
+                            ctx.lineTo(currentX, yAxis.bottom);
+                            ctx.stroke();
+                            ctx.restore();
+
+                            if (!isBaselineLocked) return;
+
+                            const bPrice = storedBaselineData.price;
+                            const baseFactor = bPrice / price;
+                            const fractionalI = (baseFactor - 1) / 0.08;
+                            const index = fractionalI + 4;
+
+                            if (index >= 0 && index <= 8) {
+                                const x_floor = xAxis.getPixelForTick(Math.floor(index));
+                                const x_ceil = xAxis.getPixelForTick(Math.min(8, Math.ceil(index)));
+                                const x = x_floor + (x_ceil - x_floor) * (index - Math.floor(index));
+
+                                ctx.save();
+                                ctx.beginPath();
+                                ctx.strokeStyle = '#f59e0b';
+                                ctx.lineWidth = 1.5;
+                                ctx.setLineDash([4, 4]);
+                                ctx.moveTo(x, yAxis.top);
+                                ctx.lineTo(x, yAxis.bottom);
+                                ctx.stroke();
+
+                                ctx.fillStyle = '#d97706';
+                                ctx.font = 'bold 10px sans-serif';
+                                ctx.textAlign = 'center';
+                                ctx.fillText('Baseline', x, yAxis.top - 4);
+                                ctx.restore();
+
+                                const bm = calcMetrics(storedBaselineData.price, storedBaselineData.cogs, storedBaselineData.traffic, storedBaselineData.cr, storedBaselineData.fixed, storedBaselineData.retention);
+                                const yVal = yAxis.getPixelForValue(bm.grossProfit);
+
+                                ctx.save();
+                                ctx.beginPath();
+                                ctx.arc(x, yVal, 6, 0, 2 * Math.PI);
+                                ctx.fillStyle = '#f59e0b';
+                                ctx.strokeStyle = '#ffffff';
+                                ctx.lineWidth = 2;
+                                ctx.fill();
+                                ctx.stroke();
+                                ctx.restore();
+                            }
+                        }
+                    }]
+                });
+            } else {
+                sweetSpotChart.data.labels = pricePoints;
+                sweetSpotChart.data.datasets = datasets;
+                sweetSpotChart.options.plugins.legend.display = isBaselineLocked;
+                sweetSpotChart.update('none');
+            }
+        }
+
+        function renderParetoSection(inputs, m, biz) {
+            const gpValue = parseFormattedNum('in-gp');
+            const isTargetGpFilled = LOCKS.gp && gpValue > 0;
+            const parent = $('pareto-opts');
+            const headline = $('pareto-headline-bar');
+            const sliderContainer = $('balanced-slider-container');
+
+            if (!isTargetGpFilled) {
+                headline.innerHTML = `<i class="ti ti-info-circle" style="color: var(--color-text-warning)"></i> Masukkan dan kunci <strong>Target Gross Profit Minimal</strong> di panel parameter sebelah kiri untuk melihat rekomendasi optimasi Pareto.`;
+                parent.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:24px;color:var(--color-text-secondary);border:1px dashed var(--color-border-tertiary);border-radius:8px;background:var(--color-background-secondary);width:100%"><i class="ti ti-target" style="font-size:24px;display:block;margin-bottom:8px;color:var(--color-text-tertiary);"></i>Silakan isi <strong>Target Gross Profit Minimal (Rp)</strong> dan klik tombol kunci <i class="ti ti-lock-open"></i> di sebelah kiri untuk mengaktifkan analisis optimasi Pareto.</div>`;
+                sliderContainer.style.display = 'none';
+                return;
+            }
+
+            // Tentukan jangkar (Anchor) perhitungan berdasarkan Baseline yang dikunci
+            const anchorT = isBaselineLocked ? storedBaselineData.traffic : initialTrafficBeforeDrag;
+            const anchorCr = isBaselineLocked ? storedBaselineData.cr : (initialCrBeforeDrag / 100);
+
+            const crMin = biz.crMin / 100, crMax = biz.crMax / 100;
+            const unitsNeeded = calcUnitsNeededForTarget(inputs.price, inputs.cogs, inputs.cr, inputs.retention, gpValue);
+
+            // Opsi A: Optimasi CR (Traffic dikunci di Baseline)
+            let crNeeded = anchorT > 0 ? (unitsNeeded / anchorT) : 0;
+            let tNeededForA = anchorT;
+            if (crNeeded > crMax) { crNeeded = crMax; tNeededForA = crMax > 0 ? (unitsNeeded / crMax) : 0; }
+            else if (crNeeded < crMin) { crNeeded = crMin; tNeededForA = crMin > 0 ? (unitsNeeded / crMin) : 0; }
+            
+            const crDeltaA = anchorCr > 0 ? ((crNeeded - anchorCr) / anchorCr * 100) : 0;
+            const tDeltaA = anchorT > 0 ? ((tNeededForA - anchorT) / anchorT * 100) : 0;
+
+            // Opsi B: Scale Traffic (CR dikunci di Baseline)
+            let tNeeded = anchorCr > 0 ? (unitsNeeded / anchorCr) : 0;
+            let crNeededForB = anchorCr;
+            if (tNeeded > 1000000) { tNeeded = 1000000; crNeededForB = Math.min(crMax, unitsNeeded / 1000000); }
+            
+            const tDeltaB = anchorT > 0 ? ((tNeeded - anchorT) / anchorT * 100) : 0;
+            const crDeltaB = anchorCr > 0 ? ((crNeededForB - anchorCr) / anchorCr * 100) : 0;
+
+            // Opsi C: balanced
+            sliderContainer.style.display = 'block';
+            let split = (+document.getElementById('sl-weight-split').value || (biz.splitDefault * 100)) / 100;
+            document.getElementById('lbl-split-ratio').textContent = `${Math.round(split * 100)}% Traffic / ${Math.round((1 - split) * 100)}% CR`;
+            let dist = calcBalancedDistribution(unitsNeeded, anchorT, anchorCr, biz, split);
+            
+            const balTDelta = anchorT > 0 ? ((dist.traffic - anchorT) / anchorT * 100) : 0;
+            const balCrDelta = anchorCr > 0 ? ((dist.cr - anchorCr) / anchorCr * 100) : 0;
+
+            headline.innerHTML = `<i class="ti ti-target-arrow"></i> Target acuan Gross Profit minimum solver saat ini: <strong>${fmt(gpValue)}</strong> (Klik kartu opsi di bawah untuk menerapkan rekomendasi ke slider)`;
+            const isCrPareto = biz.effortCR === 'Rendah';
+
+            const cards = [
+                `<div class="optcard ${isCrPareto ? 'rec' : ''}" onclick="applyParetoPreset('A')">`,
+                `<div class="octl">Opsi A: Optimasi Konversi ${isCrPareto ? '<span class="badge bp">Pareto</span>' : ''} <i class="ti ti-hand-click" style="font-size:11px;color:var(--color-text-secondary);"></i></div>`,
+                `<div class="badge blo">Effort: ${biz.effortCR}</div>`,
+                `<div style="font-size:12px;font-weight:600;margin-top:6px">CR Rasio: <strong>${(crNeeded * 100).toFixed(2)}%</strong></div>`,
+                `<div style="font-size:11px;color:var(--color-text-info)">Delta dari Baseline: ${crDeltaA >= 0 ? '+' : ''}${crDeltaA.toFixed(1)}%</div>`,
+                tDeltaA > 0.05 ? `<div style="font-size:12px;font-weight:600;margin-top:4px">Traffic: <strong>${fmtN(tNeededForA)}</strong></div><div style="font-size:11px;color:var(--color-text-info)">Delta: +${tDeltaA.toFixed(1)}% (Limpahan)</div>` : '',
+                '</div>',
+                `<div class="optcard ${!isCrPareto ? 'rec' : ''}" onclick="applyParetoPreset('B')">`,
+                `<div class="octl">Opsi B: Scale Traffic ${!isCrPareto ? '<span class="badge bp">Pareto</span>' : ''} <i class="ti ti-hand-click" style="font-size:11px;color:var(--color-text-secondary);"></i></div>`,
+                `<div class="badge bhi">Effort: ${biz.effortT}</div>`,
+                `<div style="font-size:12px;font-weight:600;margin-top:6px">Traffic: <strong>${fmtN(tNeeded)} /bln</strong></div>`,
+                `<div style="font-size:11px;color:var(--color-text-info)">Delta dari Baseline: ${tDeltaB >= 0 ? '+' : ''}${tDeltaB.toFixed(1)}%</div>`,
+                crDeltaB > 0.05 ? `<div style="font-size:12px;font-weight:600;margin-top:4px">CR Rasio: <strong>${(crNeededForB * 100).toFixed(2)}%</strong></div><div style="font-size:11px;color:var(--color-text-info)">Delta: +${crDeltaB.toFixed(1)}%</div>` : '',
+                '</div>',
+                `<div class="optcard" onclick="applyParetoPreset('C')">`,
+                `<div class="octl">Opsi C: Balanced Growth <i class="ti ti-hand-click" style="font-size:11px;color:var(--color-text-secondary);"></i></div>`,
+                `<div class="badge bb">Effort: Seimbang</div>`,
+                `<div style="font-size:12px;font-weight:600;margin-top:6px">Traffic: <strong>${fmtN(dist.traffic)}</strong></div>`,
+                `<div style="font-size:11px;color:var(--color-text-info);margin-bottom:2px">Delta T: ${balTDelta >= 0 ? '+' : ''}${balTDelta.toFixed(1)}%</div>`,
+                `<div style="font-size:12px;font-weight:600">CR Rasio: <strong>${(dist.cr * 100).toFixed(2)}%</strong></div>`,
+                `<div style="font-size:11px;color:var(--color-text-info)">Delta CR: ${balCrDelta >= 0 ? '+' : ''}${balCrDelta.toFixed(1)}%</div>`,
+                '</div>'
+            ];
+            parent.innerHTML = cards.join('');
+        }
+
+        function applyParetoPreset(option) {
+            const gpValue = parseFormattedNum('in-gp');
+            if (!LOCKS.gp || gpValue <= 0) return;
+
+            const inputs = getRawInputs();
+            const anchorT = isBaselineLocked ? storedBaselineData.traffic : initialTrafficBeforeDrag;
+            const anchorCr = isBaselineLocked ? storedBaselineData.cr : (initialCrBeforeDrag / 100);
+            const biz = BIZ[document.getElementById('biz-cat').value];
+            const unitsNeeded = calcUnitsNeededForTarget(inputs.price, inputs.cogs, inputs.cr, inputs.retention, gpValue);
+
+            let finalT = anchorT, finalCr = anchorCr;
+
+            if (option === 'A') {
+                const crMin = biz.crMin / 100, crMax = biz.crMax / 100;
+                finalCr = unitsNeeded / anchorT;
+                if (finalCr > crMax) { finalCr = crMax; finalT = crMax > 0 ? (unitsNeeded / crMax) : 0; }
+                else if (finalCr < crMin) { finalCr = crMin; finalT = crMin > 0 ? (unitsNeeded / crMin) : 0; }
+                LOCKS.cr = false; LOCKS.traffic = true; lastFreeInput = 'cr';
+            } else if (option === 'B') {
+                finalT = unitsNeeded / anchorCr;
+                if (finalT > 1000000) { finalT = 1000000; finalCr = Math.min(crMax, unitsNeeded / 1000000); }
+                LOCKS.traffic = false; LOCKS.cr = true; lastFreeInput = 'traffic';
+            } else if (option === 'C') {
+                let split = (+document.getElementById('sl-weight-split').value || (biz.splitDefault * 100)) / 100;
+                let dist = calcBalancedDistribution(unitsNeeded, anchorT, anchorCr, biz, split);
+                finalT = dist.traffic; finalCr = dist.cr;
+                LOCKS.traffic = false; LOCKS.cr = false; lastFreeInput = 'traffic';
+            }
+
+            syncTrafficInputAndSlider(finalT);
+            document.getElementById('in-cr').value = +(finalCr * 100).toFixed(2);
+            document.getElementById('sl-cr').value = Math.min(biz.crMax, finalCr * 100);
+
+            renderLockInterface();
+            update();
+        }
+
+        function clearSavedScenarios() {
+            savedScenarios = [];
+            update();
+        }
+
+        function renderComparisonTable(price, cogs, traffic, cr, m) {
+            const parent = document.getElementById('comp-tbl');
+            const bBase = isBaselineLocked ? storedBaselineData : null;
+            const bm = bBase ? calcMetrics(bBase.price, bBase.cogs, bBase.traffic, bBase.cr, bBase.fixed, bBase.retention) : null;
+
+            const rows = [
+                { label: 'Harga Jual',       active: fmt(price),          base: bBase ? fmt(bBase.price)           : null, scen: s => fmt(s.price),                       style: '' },
+                { label: 'Traffic /bln',      active: fmtN(traffic),       base: bBase ? fmtN(bBase.traffic)        : null, scen: s => fmtN(s.traffic),                    style: '' },
+                { label: 'Conversion Rate',   active: fmtP(cr * 100),      base: bBase ? fmtP(bBase.cr * 100)       : null, scen: s => fmtP(s.cr * 100),                   style: '' },
+                { label: 'Gross Profit',      active: fmt(m.grossProfit),  base: bm   ? fmt(bm.grossProfit)         : null, scen: s => fmt(s.grossProfit),                 style: 'color:var(--color-text-success);font-weight:600;' },
+            ];
+
+            let html = `<tr><th>Metrik Finansial</th><th>Skenario Aktif</th>`;
+            if (bBase) html += `<th style="background:var(--color-background-warning);color:var(--color-text-warning);">Baseline Terkunci</th>`;
+            savedScenarios.forEach(s => { html += `<th>${s.label}</th>`; });
+            html += `</tr>`;
+
+            rows.forEach(r => {
+                html += `<tr><td>${r.label}</td><td style="${r.style}">${r.active}</td>`;
+                if (bBase) html += `<td style="background:var(--color-background-warning);${r.style}">${r.base}</td>`;
+                savedScenarios.forEach(s => { html += `<td style="${r.style}">${r.scen(s)}</td>`; });
+                html += `</tr>`;
+            });
+
+            parent.innerHTML = html;
+        }
+
+        function saveCurrentScenario() {
+            const inputs = getRawInputs();
+            const m = calcMetrics(inputs.price, inputs.cogs, inputs.traffic, inputs.cr, inputs.fixed, inputs.retention);
+
+            if (savedScenarios.length >= 5) {
+                savedScenarios.shift();
+            }
+
+            const label = `Skenario ${savedScenarios.length + 1}`;
+
+            savedScenarios.push({
+                label: label,
+                price: inputs.price,
+                cogs: inputs.cogs,
+                traffic: inputs.traffic,
+                cr: inputs.cr,
+                grossProfit: m.grossProfit
+            });
+
+            update();
+        }
+
+        function renderContextualTips(inputs, m, biz) {
+            const zone = document.getElementById('advisory-alerts-zone');
+            const ownerZone = document.getElementById('owner-advisory-zone');
+            zone.innerHTML = '';
+            if (ownerZone) ownerZone.innerHTML = '';
+
+            const crPct = inputs.cr * 100;
+            const bizCat = document.getElementById('biz-cat').value;
+
+            // 1. Analisis Konversi (CR) vs Standar Industri
+            if (crPct < biz.crNorm) {
+                let crAdvice = "";
+                if (bizCat.includes('ecomm')) {
+                    crAdvice = "sebaiknya <strong>naikkan CR</strong> dengan optimasi visual aset produk (foto/video), penajaman copywriting manfaat, dan menyederhanaan alur checkout digital.";
+                } else if (bizCat.includes('retail')) {
+                    crAdvice = "sebaiknya <strong>naikkan CR</strong> dengan memperbaiki tata letak barang (merchandising), penawaran paket bundling di kasir, serta pelatihan staf toko.";
+                } else {
+                    crAdvice = "sebaiknya <strong>naikkan CR</strong> dengan memperkuat portfolio studi kasus klien dan mempercepat waktu respon tim sales terhadap lead prospek.";
+                }
+                zone.innerHTML += `<div class="narr warn-alert"><i class="ti ti-activity-heartbeat"></i> <strong>Audit Performa Konversi:</strong> Rasio Anda (${fmtP(crPct)}) masih di bawah rata-rata ${biz.label} (${fmtP(biz.crNorm)}), ${crAdvice}</div>`;
+            } else {
+                zone.innerHTML += `<div class="narr" style="border-left-color: #10b981;"><i class="ti ti-circle-check"></i> <strong>Konversi Solid:</strong> Rasio konversi Anda (${fmtP(crPct)}) sudah melampaui standar industri (${fmtP(biz.crNorm)}). Infrastruktur penjualan Anda sudah solid.</div>`;
+            }
+
+            // 2. Rekomendasi Prioritas (Traffic vs CR) berdasarkan Karakteristik Sektoral
+            if (biz.effortT === 'Sedang') {
+                let trafficMethod = bizCat.includes('ecomm') ? "optimasi Meta/TikTok Ads dan SEO konten" : "optimalisasi Google Maps (GMB) dan event komunitas lokal";
+                zone.innerHTML += `<div class="narr" style="border-left-color: #3b82f6;"><i class="ti ti-rocket"></i> <strong>Prioritas Scaling:</strong> <strong>Kejar traffic dahulu</strong> karena ini yang termudah di lini bisnis Anda. Naikkan jumlah pengunjung melalui ${trafficMethod}.</div>`;
+            } else if (biz.effortCR === 'Rendah') {
+                zone.innerHTML += `<div class="narr" style="border-left-color: #8b5cf6;"><i class="ti ti-target"></i> <strong>Efisiensi Biaya:</strong> Di kategori ${biz.label}, optimasi <strong>Konversi</strong> biasanya memberikan ROI lebih cepat dengan biaya lebih rendah dibanding mengejar traffic yang sangat kompetitif.</div>`;
+            }
+
+            // 3. Analisis Kesehatan Finansial (Titik Impas)
+            // Dipindahkan ke Owner Exclusive Zone
+            const marginPerUnit = m.totalQty > 0 ? (m.grossProfit / m.totalQty) : 0;
+            if (marginPerUnit > 0) {
+                const bepUnits = inputs.fixed / marginPerUnit;
+                if (m.totalQty < bepUnits) {
+                    const lack = Math.ceil(bepUnits - m.totalQty);
+                    if (ownerZone) {
+                        ownerZone.innerHTML = `<div style="font-size: 11px; color: var(--color-text-danger); border-top: 1px dashed var(--color-border-tertiary); padding-top: 10px;">
+                            <i class="ti ti-alert-triangle"></i> <strong>Owner's tool:</strong> Profit operasional belum mampu menutup biaya tetap. Butuh tambahan volume <strong>${fmtN(lack)} unit</strong> untuk mencapai Breakeven.
+                        </div>`;
+                    }
+                }
+            } else if (m.grossProfit <= 0) {
+                if (ownerZone) {
+                    ownerZone.innerHTML = `<div style="font-size: 11px; color: var(--color-text-danger); border-top: 1px dashed var(--color-border-tertiary); padding-top: 10px;">
+                        <i class="ti ti-skull"></i> <strong>Owner's tool:</strong> Margin kontribusi negatif atau nol. Evaluasi Harga Jual atau HPP segera untuk menghindari kerugian berkelanjutan.
+                    </div>`;
+                }
+            }
+
+            // 4. Analisis ROAS (Hanya di mode Advanced)
+            if (mktTab === 'adv' && m.roas > 0) {
+                if (m.roas < 2.5) {
+                    zone.innerHTML += `<div class="narr" style="border-left-color: #f59e0b; background: #fffbeb; color: #92400e;"><i class="ti ti-chart-arrows"></i> <strong>Efisiensi Iklan Rendah:</strong> ROAS ${m.roas.toFixed(1)}x menunjukkan biaya akuisisi terlalu mahal. Perbaiki materi kreatif iklan atau naikkan nilai belanja rata-rata (AOV).</div>`;
+                } else if (m.roas > 6) {
+                    zone.innerHTML += `<div class="narr" style="border-left-color: #3b82f6; background: #eff6ff; color: #1e40af;"><i class="ti ti-trending-up"></i> <strong>Peluang Scaling:</strong> ROAS Anda sangat sehat (${m.roas.toFixed(1)}x). Saatnya menambah budget akuisisi di Klaster C untuk mendominasi pasar.</div>`;
+                }
+            }
+
+            // 5. Tip Spesifik Model Bisnis
+            if (bizCat === 'ecomm-niche') {
+                zone.innerHTML += `<div class="narr"><i class="ti ti-messages"></i> <strong>Saran Karakteristik Niche:</strong> Segmen spesialis bertumpu pada retensi komunitas. Fokus bangun lingkaran loyalitas (WA Group/Telegram) karena konversi pembeli lama jauh lebih murah dibanding mencari pelanggan baru.</div>`;
+            }
+        }
+
+        function renderReportOutput(inputs, m, biz) {
+            const box = document.getElementById('rbox');
+            const tipsElements = document.getElementById('advisory-alerts-zone').querySelectorAll('.narr');
+            let compiledTipsText = '';
+            let compiledTipsArray = [];
+            tipsElements.forEach((el, index) => { 
+                compiledTipsText += `${index + 1}. ${el.textContent}\n`; 
+                compiledTipsArray.push(el.textContent.trim());
+            });
+
+            // Ekstraksi data klaster marketing untuk konteks AI
+            const mktData = {
+                mode: mktTab,
+                cpc: parseFormattedNum('m-cpc'),
+                plat_fee_pct: parseFloat($('m-plat').value) || 0,
+                pgw_fee_pct: parseFloat($('m-pgw').value) || 0,
+                ship_sub: parseFormattedNum('m-ship'),
+                aff_pct: parseFloat($('m-aff-pct').value) || 0,
+                sales_fix: parseFormattedNum('m-aff-fix'),
+                dist_fee: parseFormattedNum('m-dist'),
+                ads_spend: parseFormattedNum('m-ads'),
+                kol_event: parseFormattedNum('m-kol')
+            };
+
+            let mktInfo = mktTab === 'simple' ? 
+                `- Mode: Blended CPC\n- Biaya per Klik (CPC): ${fmt(mktData.cpc)}` :
+                `- Klaster A (Platform): Fee ${mktData.plat_fee_pct}% + PGW ${mktData.pgw_fee_pct}% + Subsidi ${fmt(mktData.ship_sub)}/unit\n` +
+                `- Klaster B (Distribusi): Affiliate ${mktData.aff_pct}% / Sales Fix ${fmt(mktData.sales_fix)} + Dist ${fmt(mktData.dist_fee)}/unit\n` +
+                `- Klaster C (Akuisisi): Ads ${fmt(mktData.ads_spend)} | KOL & Event ${fmt(mktData.kol_event)}`;
+
+            if (reportFormat === 'json') {
+                const jsonData = {
+                    prompt_context: {
+                        role: "Senior Business Consultant dan Ahli Strategi Growth Hacking",
+                        objective: "Analisis data simulasi bisnis dan berikan rekomendasi strategis untuk meningkatkan profitabilitas."
+                    },
+                    data_metrik: {
+                        model_bisnis: biz.label,
+                        harga_jual_aov: inputs.price,
+                        hpp_cogs_unit: inputs.cogs,
+                        traffic_pengunjung: inputs.traffic,
+                        conversion_rate_aktual_pct: inputs.cr * 100,
+                        rata_rata_industri_cr_pct: biz.crNorm,
+                        estimasi_omset: m.totalRev,
+                        gross_profit_marketing: m.grossProfit,
+                        blended_roas: parseFloat(m.roas.toFixed(1)),
+                        struktur_biaya_marketing: mktData
+                    },
+                    rekomendasi_sistem: compiledTipsArray.length > 0 ? compiledTipsArray : ["Seluruh metrik saat ini terpantau berada dalam batas wajar industri."],
+                    instruksi_analisis_ai: [
+                        "Berikan evaluasi mendalam apakah struktur harga (AOV) dan biaya (HPP) sudah memberikan ruang margin yang sehat untuk melakukan scaling.",
+                        "Berdasarkan data ROAS dan perbandingan CR terhadap rata-rata industri, identifikasi di mana kebocoran profit terbesar terjadi.",
+                        "Berikan 3 langkah taktis prioritas yang harus dilakukan pemilik bisnis minggu ini untuk meningkatkan laba bersih tanpa harus menaikkan budget iklan secara drastis."
+                    ],
+                    metadata: { timestamp: new Date().toISOString() },
+                    saved_scenarios: savedScenarios
+                };
+                box.textContent = JSON.stringify(jsonData, null, 2);
+            } else {
+                box.textContent = `Bertindaklah sebagai Senior Business Consultant dan Ahli Strategi Growth Hacking. Analisis data simulasi bisnis di bawah ini dan berikan rekomendasi strategis yang tajam untuk meningkatkan profitabilitas perusahaan.
+
+DATA METRIK BISNIS SAAT INI:
+- Model Bisnis: ${biz.label}
+- Harga Jual (AOV): ${fmt(inputs.price)}
+- HPP (COGS) per Unit: ${fmt(inputs.cogs)}
+- Traffic Pengunjung: ${fmtN(inputs.traffic)} Kunjungan/Bulan
+- Conversion Rate (CR): ${fmtP(inputs.cr * 100)} (Rata-rata Industri: ${fmtP(biz.crNorm)})
+- Estimasi Omset: ${fmt(m.totalRev)}
+- Gross Profit: ${fmt(m.grossProfit)}
+- Blended ROAS: ${m.roas.toFixed(1)}x
+
+STRUKTUR BIAYA MARKETING:
+${mktInfo}
+
+REKOMENDASI SISTEM CALCULATOR:
+${compiledTipsText || "Seluruh metrik saat ini terpantau berada dalam batas wajar industri."}
+
+INSTRUKSI ANALISIS UNTUK AI:
+1. Berikan evaluasi mendalam apakah struktur harga (AOV) dan biaya (HPP) sudah memberikan ruang margin yang sehat untuk melakukan scaling.
+2. Berdasarkan data ROAS dan perbandingan CR terhadap rata-rata industri, identifikasi di mana kebocoran profit terbesar terjadi.
+3. Berikan 3 langkah taktis prioritas yang harus dilakukan pemilik bisnis minggu ini untuk meningkatkan laba bersih tanpa harus menaikkan budget iklan secara drastis.`;
+            }
+
+            // RENDER OWNER EXCLUSIVE REPORT
+            const ownerBox = document.getElementById('owner-rbox');
+            const ownerTipsElements = document.getElementById('owner-advisory-zone').textContent;
+            
+            if (ownerReportFormat === 'json') {
+                const ownerJsonData = {
+                    prompt_context: {
+                        role: "Chief Financial Officer (CFO) dan Senior Business Strategist",
+                        objective: "Evaluasi kesehatan finansial makro perusahaan, analisis struktur biaya tetap, dan proyeksi laba bersih."
+                    },
+                    data_sensitif_owner: {
+                        fixed_costs: inputs.fixed,
+                        net_profit_akhir: m.netProfit,
+                        margin_kontribusi_per_unit: (m.grossProfit / m.totalQty) || 0,
+                        break_even_point_units: (inputs.fixed / ((m.grossProfit / m.totalQty) || 1))
+                    },
+                    data_operasional: {
+                        aov: inputs.price,
+                        gross_profit: m.grossProfit,
+                        total_unit_terjual: m.totalQty,
+                        roas: parseFloat(m.roas.toFixed(1)),
+                        struktur_biaya_marketing: mktData
+                    },
+                    temuan_owner_tool: ownerTipsElements.trim() || "Struktur biaya tetap tertutup dengan aman oleh profit operasional.",
+                    instruksi_analisis_finansial: [
+                        "Analisis apakah laba bersih saat ini sudah ideal dibandingkan dengan risiko biaya tetap yang ditanggung.",
+                        "Evaluasi kapasitas perusahaan untuk melakukan ekspansi atau pembagian dividen berdasarkan sisa laba bersih.",
+                        "Berikan saran mengenai efisiensi biaya tetap (overhead) dan bagaimana dampaknya terhadap penurunan harga jual (Price War) jika diperlukan."
+                    ]
+                };
+                ownerBox.textContent = JSON.stringify(ownerJsonData, null, 2);
+            } else {
+                ownerBox.textContent = `Bertindaklah sebagai Chief Financial Officer (CFO) dan Strategic Business Owner. Gunakan data finansial makro di bawah ini untuk menganalisis keberlanjutan bisnis dan efisiensi struktur biaya.
+
+RINGKASAN EKSEKUTIF FINANSIAL:
+- Biaya Tetap (Overhead): ${fmt(inputs.fixed)}
+- Laba Bersih (Net Profit): ${fmt(m.netProfit)}
+- Harga Jual (AOV): ${fmt(inputs.price)}
+- Gross Profit: ${fmt(m.grossProfit)}
+- Total Unit Terjual: ${fmtN(m.totalQty)} unit
+- Blended ROAS: ${m.roas.toFixed(1)}x
+
+DETAIL BIAYA MARKETING:
+${mktInfo}
+
+TEMUAN OWNER'S ADVISORY TOOL:
+${ownerTipsElements.trim() || "Struktur biaya operasional terpantau sehat dan menutup seluruh beban tetap."}
+
+INSTRUKSI ANALISIS STRATEGIS OWNER:
+1. Analisis ketahanan bisnis terhadap fluktuasi biaya tetap. Apakah margin kontribusi saat ini sudah cukup aman untuk menyerap kenaikan biaya overhead (seperti sewa atau gaji) di masa depan?
+2. Berdasarkan Net Profit yang dihasilkan, berikan saran apakah laba sebaiknya diinvestasikan kembali ke marketing (Klaster C) atau digunakan untuk penguatan cadangan kas perusahaan.
+3. Identifikasi skenario 'Worst Case' berdasarkan angka Breakeven yang ada; berapa penurunan traffic maksimal yang bisa ditoleransi sebelum perusahaan mengalami kerugian bersih?`;
+            }
+        }
+
+        function switchOwnerReportTab(type) {
+            ownerReportFormat = type;
+            document.getElementById('tab-owner-rep-txt').classList.toggle('active', type === 'txt');
+            document.getElementById('tab-owner-rep-json').classList.toggle('active', type === 'json');
+            update();
+        }
+
+        function copyOwnerReport() {
+            const content = document.getElementById('owner-rbox').textContent;
+            if (!content) return;
+            navigator.clipboard.writeText(content);
+            alert('Laporan Strategis Owner berhasil disalin ke clipboard!');
+        }
+
+        function switchMkt(mode) {
+            mktTab = mode;
+            document.getElementById('mkt-simple').style.display = mode === 'simple' ? 'block' : 'none';
+            document.getElementById('mkt-adv').style.display = mode === 'adv' ? 'block' : 'none';
+            document.getElementById('tab-ms').classList.toggle('active', mode === 'simple');
+            document.getElementById('tab-ma').classList.toggle('active', mode === 'adv');
+            update();
+        }
+
+        function switchReportTab(type) {
+            reportFormat = type;
+            document.getElementById('tab-rep-txt').classList.toggle('active', type === 'txt');
+            document.getElementById('tab-rep-json').classList.toggle('active', type === 'json');
+            update();
+        }
+
+        function copyReport() {
+            navigator.clipboard.writeText(document.getElementById('rbox').textContent);
+            alert('Laporan berhasil disalin ke clipboard!');
+        }
+
+        function checkValidationEngine(price, cogs) {
+            const errorBox = document.getElementById('error-alert-board');
+            const allowNeg = (currentCapMode === 'allow');
+
+            if (cogs >= price) {
+                errorBox.style.display = 'block';
+                errorBox.className = 'narr ' + (cogs > price ? 'warn-alert' : '');
+                errorBox.style.background = allowNeg ? 'var(--color-background-warning)' : '#fff5f4';
+                errorBox.style.borderLeftColor = allowNeg ? 'var(--color-text-warning)' : 'var(--color-text-danger)';
+                errorBox.style.color = allowNeg ? 'var(--color-text-warning)' : 'var(--color-text-danger)';
+                
+                errorBox.innerHTML = `<i data-lucide="alert-octagon" style="width:14px; height:14px; display:inline-block; vertical-align:middle;"></i> <strong>${cogs > price ? 'MARGIN NEGATIF (LOSS):' : 'BREAK EVEN POINT:'}</strong> HPP unit (${fmt(cogs)}) ${cogs > price ? 'melebihi' : 'menyamai'} Harga Jual (${fmt(price)}). Simulasi tetap menghitung proyeksi kerugian.`;
+                lucide.createIcons();
+                return true;
+            }
+            
+            errorBox.style.display = 'none';
+            return true;
+        }
+
+        // ─── PROFIT FLOOR ENFORCER ───────────────────────────────────────────
+        // Dipanggil SETELAH nilai slider diubah user, SEBELUM update().
+        // Logic:
+        //   - slider CR turun → kalau profit >= target, biarkan
+        //                     → kalau profit < target, naikkan traffic supaya profit kembali ke target
+        //   - slider Traffic turun → sama, naikkan CR kalau kurang
+        //   - slider Price turun → kalau profit jatuh di bawah target, block slider (kembalikan ke posisi lama)
+        function enforceTargetProfitFloor(movedKey, previousValue) {
+            const gpTarget = LOCKS.gp ? parseFormattedNum('in-gp') : 0;
+            const revTarget = LOCKS.rev ? parseFormattedNum('in-rev') : 0;
+            if (!gpTarget && !revTarget) return; // tidak ada target aktif, skip
+
+            let { price, cogs, traffic, cr, fixed, retention } = getRawInputs();
+            const biz = BIZ[document.getElementById('biz-cat').value];
+            const m = calcMetrics(price, cogs, traffic, cr, fixed, retention);
+
+            const metricBelowTarget = (gpTarget && m.grossProfit < gpTarget) || (revTarget && m.totalRev < revTarget);
+            if (!metricBelowTarget) return; // masih aman, tidak perlu apa-apa
+
+            // Proteksi Kontribusi Margin Negatif untuk Solver
+            const contrib = calcUnitContribution(price, cogs, cr, retention);
+            if (contrib <= 0 && (gpTarget > 0)) {
+                // Revert slider jika margin sudah negatif sehingga tidak bisa di-solve
+                const num = document.getElementById('in-' + movedKey);
+                const sl = document.getElementById('sl-' + movedKey);
+                num.value = previousValue;
+                sl.value = previousValue;
+                return;
+            }
+
+            if (movedKey === 'price') {
+                // Harga turun bikin profit drop → block: kembalikan harga ke nilai sebelumnya
+                document.getElementById('in-price').value = previousValue;
+                document.getElementById('sl-price').value = previousValue;
+                // Tampilkan notif
+                const warn = document.getElementById('price-warning');
+                warn.style.display = 'block';
+                warn.style.background = '#fff0f0';
+                warn.style.borderLeftColor = 'var(--color-text-danger)';
+                warn.style.color = 'var(--color-text-danger)';
+                warn.innerHTML = `<i class="ti ti-ban"></i> <strong>Slider Diblokir:</strong> Penurunan harga ini akan membuat profit jatuh di bawah target. Naikkan Traffic atau CR terlebih dahulu sebelum menurunkan harga lebih jauh.`;
+                return; // jangan panggil update lagi
+            }
+
+            if (movedKey === 'cr') {
+                // CR diturunkan → kompensasi dengan naikkan traffic
+                const crMin = biz.crMin / 100, crMax = biz.crMax / 100;
+                const unitsNeeded = gpTarget
+                    ? calcUnitsNeededForTarget(price, cogs, cr, retention, gpTarget)
+                    : (revTarget / (price * (1 + retention)));
+                const newTraffic = cr > 0 ? Math.ceil(unitsNeeded / cr) : traffic;
+                // Cap kompensasi traffic agar tidak melompat terlalu jauh (max 5x dari max slider saat ini)
+                const currentMax = +document.getElementById('sl-traffic').max;
+                syncTrafficInputAndSlider(Math.min(newTraffic, currentMax * 5));
+            } else if (movedKey === 'traffic') {
+                // Traffic diturunkan → kompensasi dengan naikkan CR
+                const crMin = biz.crMin / 100, crMax = biz.crMax / 100;
+                const unitsNeeded = gpTarget
+                    ? calcUnitsNeededForTarget(price, cogs, cr, retention, gpTarget)
+                    : (revTarget / (price * (1 + retention)));
+                let newCR = traffic > 0 ? (unitsNeeded / traffic) : cr;
+                // Cap CR sesuai batas atas kategori bisnis
+                newCR = Math.min(crMax, newCR);
+                document.getElementById('in-cr').value = +(newCR * 100).toFixed(2);
+                document.getElementById('sl-cr').value = Math.min(biz.crMax, newCR * 100);
+            }
+        }
+
+        function wireEvents(id, sliderId) {
+            const num = document.getElementById(id);
+            const sl = document.getElementById(sliderId);
+            const key = id.replace('in-', '');
+            const isCrField = id.includes('cr');
+            let prevSliderVal = sl.value; // track previous untuk price-block
+
+            const startTracking = () => { prevSliderVal = sl.value; resetBaselineBenchmarks(); };
+            // Tambahkan tracking saat kotak input diklik/difokuskan agar baseline sinkron
+            sl.addEventListener('mousedown', startTracking);
+            sl.addEventListener('touchstart', startTracking);
+            num.addEventListener('focus', startTracking);
+
+            sl.addEventListener('input', () => {
+                num.value = isCrField ? sl.value : parseInt(sl.value).toLocaleString('id-ID');
+                lastFreeInput = key; 
+
+                // LOGIKA: Baseline sebagai Floor Dinamis
+                if (isBaselineLocked && (key === 'traffic' || key === 'cr')) {
+                    const priceRatio = parseFormattedNum('in-price') / dynamicBaselinePrice;
+                    const smoothedIntervals = Math.log(priceRatio) / Math.log(1.10);
+                    const mods = getElastModifiers();
+                    const factor = 1 - (smoothedIntervals * (key === 'traffic' ? mods.tDrop : mods.crDrop));
+                    const dynamicFloor = (key === 'traffic' ? storedBaselineData.traffic : (storedBaselineData.cr * 100)) * Math.min(1, factor);
+                    
+                    if (parseFloat(sl.value) < dynamicFloor) { sl.value = dynamicFloor; num.value = isCrField ? sl.value : Math.round(dynamicFloor).toLocaleString('id-ID'); }
+                }
+
+                if (currentCapMode === 'strict') {
+                    let p = parseFormattedNum('in-price');
+                    let c = parseFormattedNum('in-cogs');
+                    if (key === 'price' && p < c) {
+                        num.value = c.toLocaleString('id-ID');
+                        sl.value = c;
+                    } else if (key === 'cogs' && c > p) {
+                        document.getElementById('in-price').value = c.toLocaleString('id-ID');
+                        document.getElementById('sl-price').value = c;
+                        lastFreeInput = 'price'; // Trigger market reaction (elasticity)
+                    }
+                }
+                if (LOCKS[key]) toggleLock(key);
+                enforceTargetProfitFloor(key, prevSliderVal);
+                update();
+            });
+
+            num.addEventListener('input', () => {
+                if (!isCrField) formatInputThousand(num);
+                lastFreeInput = key;
+                const val = isCrField ? parseFloat(num.value) : parseFormattedNum(id);
+                if (id === 'in-traffic' && val > +sl.max) sl.max = Math.round(val * 1.5);
+
+                // Jika input manual AOV atau HPP melebihi batas, perbarui skala keduanya agar tetap sinkron
+                if ((key === 'price' || key === 'cogs') && val > +sl.max) {
+                    const newMax = Math.round(val * 1.5);
+                    document.getElementById('sl-price').max = newMax;
+                    document.getElementById('sl-cogs').max = newMax;
+                }
+
+                sl.value = val;
+                
+                // Hapus debounce 180ms agar respon pengetikan manual secepat slider
+                update();
+            });
+
+            num.addEventListener('change', () => {
+                prevSliderVal = isCrField ? parseFloat(num.value) : parseFormattedNum(id);
+                resetBaselineBenchmarks();
+                lastFreeInput = key;
+                if (LOCKS[key]) toggleLock(key);
+                enforceTargetProfitFloor(key, prevSliderVal);
+                update();
+            });
+    }
+
+    function syncCogsToPrice(p) {
+        document.getElementById('in-cogs').value = p.toLocaleString('id-ID');
+        document.getElementById('sl-cogs').value = p;
+        }
+
+        // BINDING EVENT HANDLER UTAMA
+        wireEvents('in-price', 'sl-price');
+        wireEvents('in-cogs', 'sl-cogs');
+        wireEvents('in-traffic', 'sl-traffic');
+        wireEvents('in-cr', 'sl-cr');
+
+        document.getElementById('in-fixed').addEventListener('change', update);
+        document.getElementById('in-blended-pct').addEventListener('input', () => { lastFreeInput = 'margin'; update(); });
+        document.getElementById('m-cpc').addEventListener('change', update);
+        ['m-plat', 'm-pgw', 'm-ship', 'm-aff-pct', 'm-aff-fix', 'm-dist', 'm-ads', 'm-kol'].forEach(id => { if($(id)) $(id).addEventListener('change', update); });
+
+        ['rev', 'gp'].forEach(k => {
+            const el = document.getElementById('in-' + k);
+            el.addEventListener('input', function () {
+                formatInputThousand(this);
+            });
+            el.addEventListener('change', function () { if (!LOCKS[k]) toggleLock(k); else update(); });
+        });
+
+        document.getElementById('sl-ret').addEventListener('input', function () { document.getElementById('in-ret').value = this.value; update(); });
+        document.getElementById('in-ret').addEventListener('change', function () { document.getElementById('sl-ret').value = this.value; update(); });
+
+        function initInputMasks() {
+            ['in-price', 'in-cogs', 'in-traffic', 'in-rev', 'in-gp', 'm-cpc', 'm-ship', 'm-ads', 'in-fixed'].forEach(id => {
+                const el = $(id);
+                if (el) {
+                    el.type = 'text';
+                    formatInputThousand(el);
+                }
+            });
+        }
+
+        renderLockInterface();
+        initInputMasks();
+        applyBizPreset();
+    </script>
+</body>
+
+</html>
