@@ -56,7 +56,7 @@
 
         .s {
             background: var(--color-card-bg);
-            border: 1px solid var(--color-neutral);
+            border: 1px solid var(--color-primary);
             border-radius: 12px;
             padding: 1.5rem;
             margin-bottom: 1.5rem;
@@ -73,7 +73,19 @@
             color: var(--color-text-primary);
         }
 
-        .stitle i, .stitle svg { color: var(--color-marketing); }
+        /* Style Box Ikon Utama (Oranye) di depan Judul Bagian */
+        .stitle > [data-lucide],
+        .stitle > span:not(.tooltip) > [data-lucide]:first-child { 
+            color: #0B447C; 
+            background: var(--color-marketing);
+            padding: 6px;
+            border-radius: 8px;
+            width: 32px !important;
+            height: 32px !important;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
 
         .g2 {
             display: grid;
@@ -97,12 +109,12 @@
             background: var(--color-sidebar);
             border-radius: 10px;
             padding: 16px;
-            border: 1px solid var(--color-neutral);
+            border: 1px solid var(--color-primary);
         }
 
         .mcluster {
             background: #fff;
-            border: 1px solid var(--color-neutral);
+            border: 1px solid var(--color-primary);
             border-radius: 10px;
             padding: 16px;
             display: flex;
@@ -178,8 +190,8 @@
         }
 
         .lockbtn {
-            width: 28px;
-            height: 28px;
+            width: 24px;
+            height: 24px;
             border-radius: 8px;
             border: 1px solid var(--color-neutral);
             background: transparent;
@@ -277,7 +289,7 @@
         }
 
         .optcard {
-            border: 1px solid var(--color-neutral);
+            border: 1px solid var(--color-primary);
             border-radius: 12px;
             padding: 12px 14px;
             margin-bottom: 10px;
@@ -415,13 +427,13 @@
 
         .chartarea {
             position: relative;
-            height: 350px;
-            margin: 1rem 0;
+            height: 400px;
+            margin: 0.5rem -1.5rem -1.5rem -1.5rem;
         }
 
         /* Collapsible Accordion Utility */
         .accordion-owner {
-            border: 1px solid var(--color-neutral);
+            border: 1px solid var(--color-primary);
             border-radius: 12px;
             background: #fff;
             margin-top: 1.5rem;
@@ -495,7 +507,7 @@
 
         /* Style for Instruction Guide */
         .guide-section {
-            border: 2px solid var(--color-primary);
+            border: 1px solid var(--color-primary);
             border-radius: 12px;
             background: #fff;
             margin-bottom: 1.5rem;
@@ -531,13 +543,13 @@
 <body>
 
     <div class="container">
-        <h1 style="margin-bottom: 2rem; display: flex; align-items: center; gap: 12px;"><i data-lucide="layout-dashboard"
-                style="color:var(--color-primary); width: 32px; height: 32px;"></i> Pepi Marketing Simulator v3</h1>
+        <h1 style="margin-bottom: 2rem; display: flex; align-items: center; gap: 12px;"><i data-lucide="layers"
+                style="color: #0B447C; background: var(--color-primary); padding: 8px; border-radius: 12px; width: 48px; height: 48px;"></i> Pepi Marketing Simulator v3</h1>
 
         <!-- Petunjuk Pemakaian -->
         <div class="guide-section">
             <div class="guide-trigger" onclick="toggleGuide()">
-                <span><i data-lucide="help-circle" style="width:16px; height:16px; vertical-align:middle; margin-right:8px;"></i> Panduan Cepat & Strategi Penggunaan</span>
+                <span style="display: flex; align-items: center; gap: 8px;"><i data-lucide="help-circle" style="width:16px; height:16px; color: #0c447c;"></i> Panduan Cepat & Strategi Penggunaan</span>
                 <span id="guide-chevron">▼</span>
             </div>
             <div class="guide-content" id="guide-content">
@@ -568,9 +580,11 @@
         </div>
 
         <div class="s">
-            <div class="stitle">
-                <i data-lucide="settings-2"></i> Setup & Konfigurasi Bisnis
-                <span class="tooltip"><i data-lucide="help-circle" style="width:16px; height:16px;"></i>
+            <div class="stitle" style="display: flex; align-items: center; gap: 10px;">
+                <span style="display: flex; align-items: center; gap: 10px;">
+                    <i data-lucide="settings-2"></i> Setup & Konfigurasi Bisnis
+                </span>
+                <span class="tooltip"><i data-lucide="help-circle" style="width:12px; height:12px;"></i>
                     <span class="tooltiptext">Tentukan profil bisnis Anda di sini. Pilihan kategori akan menyesuaikan standar konversi industri dan seberapa sensitif pelanggan Anda terhadap perubahan harga.</span>
                 </span>
             </div>
@@ -579,7 +593,7 @@
                     <label
                         style="font-size:12px; color:var(--color-text-secondary); display:block; margin-bottom:6px">
                         Kategori Bisnis
-                        <span class="tooltip"><i data-lucide="help-circle" style="width:14px; height:14px;"></i>
+                        <span class="tooltip"><i data-lucide="help-circle" style="width:12px; height:12px;"></i>
                             <span class="tooltiptext">Setiap kategori memiliki "Normal Industri" yang berbeda untuk Konversi (CR) dan tingkat elastisitas harga.</span>
                         </span>
                     </label>
@@ -596,13 +610,25 @@
                         <option value="service-relational">Jasa Profesional / Relasional (Kontraktor Konstruksi, Agensi
                             B2B)</option>
                     </select>
+
+                    <div style="margin-top: 1.25rem;">
+                        <label style="font-size:12px; color:var(--color-text-secondary); display:block; margin-bottom:6px">
+                            Nama / Deskripsi Bisnis Spesifik
+                            <span class="tooltip"><i data-lucide="help-circle" style="width:12px; height:12px;"></i>
+                                <span class="tooltiptext">Jelaskan apa yang Anda jual secara spesifik agar AI dapat memberikan saran yang lebih relevan dengan industri Anda.</span>
+                            </span>
+                        </label>
+                        <input type="text" id="biz-detail" placeholder="Contoh: Brand Skincare Organik, Jasa Fotografi Wedding..." 
+                            style="width:100%; font-size: 13px; padding: 10px 14px; border-radius: 8px; border: 1px solid var(--color-neutral); background: #fff; color: var(--color-text-primary); outline: none;" 
+                            oninput="update()">
+                    </div>
                 </div>
                 <div>
                     <div
                         style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
                         <label style="font-size:12px; color:var(--color-text-secondary);">Indikator Elastisitas Sektoral
                             Aktif
-                            <span class="tooltip"><i data-lucide="help-circle" style="width:14px; height:14px;"></i>
+                            <span class="tooltip"><i data-lucide="help-circle" style="width:12px; height:12px;"></i>
                                 <span class="tooltiptext">Mengukur seberapa sensitif pasar Anda terhadap perubahan harga. Jika harga naik, alat ini memprediksi penurunan traffic secara otomatis.</span>
                             </span>
                         </label>
@@ -636,9 +662,9 @@
                 style="margin-bottom: 0; display: flex; flex-direction: column; justify-content: space-between;">
                 <div>
                     <div class="stitle" style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px;">
-                        <span>
+                        <span style="display: flex; align-items: center; gap: 10px;">
                             <i data-lucide="sliders-horizontal"></i> Parameter Operasional & Marketing
-                            <span class="tooltip"><i data-lucide="help-circle" style="width:16px; height:16px;"></i>
+                            <span class="tooltip"><i data-lucide="help-circle" style="width:12px; height:12px;"></i>
                                 <span class="tooltiptext">Panel kontrol utama simulasi. Masukkan data real Anda dan gunakan slider untuk melihat bagaimana perubahan harga (AOV), Traffic, dan CR berdampak pada profit total. Klik save untuk menyimpan simulasi untuk perbandingan di bawah.</span>
                             </span>
                         </span>
@@ -657,9 +683,9 @@
                     <div class="prow">
                     <div style="display: flex; justify-content: space-between; align-items: center;">
                         <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-                            <button class="lockbtn" id="lk-price" onclick="toggleLock('price')"><i data-lucide="lock-keyhole-open"></i></button>
+                            <button class="lockbtn" id="lk-price" onclick="toggleLock('price')"><i data-lucide="lock-keyhole-open" style="width:14px; height:14px;"></i></button>
                             <label>AOV (Average Order Value) (Rp) <span id="sh-price" style="font-size:10px; color:var(--color-text-tertiary); font-weight:normal;"></span></label>
-                            <span class="tooltip"><i data-lucide="help-circle" style="width:14px; height:14px;"></i>
+                            <span class="tooltip"><i data-lucide="help-circle" style="width:12px; height:12px;"></i>
                                 <span class="tooltiptext">Harga jual rata-rata per pesanan. Geser slider ini untuk simulasi kenaikan harga (Upselling) atau diskon.</span>
                             </span>
                         </div>
@@ -679,9 +705,9 @@
                 <div class="prow">
                     <div style="display: flex; justify-content: space-between; align-items: center;">
                         <div style="display: flex; align-items: center; gap: 8px;">
-                            <button class="lockbtn" id="lk-cogs" onclick="toggleLock('cogs')"><i data-lucide="lock-keyhole-open"></i></button>
+                            <button class="lockbtn" id="lk-cogs" onclick="toggleLock('cogs')"><i data-lucide="lock-keyhole-open" style="width:14px; height:14px;"></i></button>
                             <label>HPP / COGS Unit (Rp) <span id="sh-cogs" style="font-size:10px; color:var(--color-text-tertiary); font-weight:normal;"></span></label>
-                            <span class="tooltip"><i data-lucide="help-circle" style="width:14px; height:14px;"></i>
+                            <span class="tooltip"><i data-lucide="help-circle" style="width:12px; height:12px;"></i>
                                 <span class="tooltiptext">Biaya Pokok Produksi per satu unit barang. Termasuk bahan baku dan upah produksi langsung.</span>
                             </span>
                         </div>
@@ -693,9 +719,9 @@
                 <div class="prow">
                     <div style="display: flex; justify-content: space-between; align-items: center;">
                         <div style="display: flex; align-items: center; gap: 8px;">
-                            <button class="lockbtn" id="lk-traffic" onclick="toggleLock('traffic')"><i data-lucide="lock-keyhole-open"></i></button>
+                            <button class="lockbtn" id="lk-traffic" onclick="toggleLock('traffic')"><i data-lucide="lock-keyhole-open" style="width:14px; height:14px;"></i></button>
                             <label>Traffic Inbound <span id="sh-traffic" style="font-size:10px; color:var(--color-text-tertiary); font-weight:normal;"></span></label>
-                            <span class="tooltip"><i data-lucide="help-circle" style="width:14px; height:14px;"></i>
+                            <span class="tooltip"><i data-lucide="help-circle" style="width:12px; height:12px;"></i>
                                 <span class="tooltiptext">Jumlah calon pelanggan yang melihat produk Anda per bulan (contoh: pengunjung web, chat masuk, atau foot traffic).</span>
                             </span>
                         </div>
@@ -707,9 +733,9 @@
                 <div class="prow">
                     <div style="display: flex; justify-content: space-between; align-items: center;">
                         <div style="display: flex; align-items: center; gap: 8px;">
-                            <button class="lockbtn" id="lk-cr" onclick="toggleLock('cr')"><i data-lucide="lock-keyhole-open"></i></button>
+                            <button class="lockbtn" id="lk-cr" onclick="toggleLock('cr')"><i data-lucide="lock-keyhole-open" style="width:14px; height:14px;"></i></button>
                             <label>Conversion Rate (%) <span id="sh-cr" style="font-size:10px; color:var(--color-text-tertiary); font-weight:normal;"></span></label>
-                            <span class="tooltip"><i data-lucide="help-circle" style="width:14px; height:14px;"></i>
+                            <span class="tooltip"><i data-lucide="help-circle" style="width:12px; height:12px;"></i>
                                 <span class="tooltiptext">Persentase pengunjung yang akhirnya membeli. Jika traffic 100 dan pembeli 3, maka CR adalah 3%.</span>
                             </span>
                         </div>
@@ -734,9 +760,9 @@
                 <div class="prow">
                     <div style="display: flex; justify-content: space-between; align-items: center;">
                         <div style="display: flex; align-items: center; gap: 8px;">
-                            <button class="lockbtn" id="lk-rev" onclick="toggleLock('rev')"><i data-lucide="lock-keyhole-open"></i></button>
+                            <button class="lockbtn" id="lk-rev" onclick="toggleLock('rev')"><i data-lucide="lock-keyhole-open" style="width:14px; height:14px;"></i></button>
                             <label>Target Omset Minimal (Rp)
-                                <span class="tooltip"><i data-lucide="help-circle" style="width:14px; height:14px;"></i>
+                                <span class="tooltip"><i data-lucide="help-circle" style="width:12px; height:12px;"></i>
                                     <span class="tooltiptext">Masukkan target omset Anda di sini dan kunci (klik gembok), maka sistem akan mencari berapa traffic/CR yang Anda butuhkan otomatis.</span>
                                 </span>
                             </label>
@@ -747,9 +773,9 @@
                 <div class="prow">
                     <div style="display: flex; justify-content: space-between; align-items: center;">
                         <div style="display: flex; align-items: center; gap: 8px;">
-                            <button class="lockbtn" id="lk-gp" onclick="toggleLock('gp')"><i data-lucide="lock-keyhole-open"></i></button>
+                            <button class="lockbtn" id="lk-gp" onclick="toggleLock('gp')"><i data-lucide="lock-keyhole-open" style="width:14px; height:14px;"></i></button>
                             <label>Target Gross Profit Minimal (Rp)
-                                <span class="tooltip"><i data-lucide="help-circle" style="width:14px; height:14px;"></i>
+                                <span class="tooltip"><i data-lucide="help-circle" style="width:12px; height:12px;"></i>
                                     <span class="tooltiptext">Tentukan target profit kotor bulanan yang ingin dicapai. Sistem akan menghitung otomatis kebutuhan traffic/konversi untuk mencapainya.</span>
                                 </span>
                             </label>
@@ -770,9 +796,9 @@
             <div class="s"
                 style="margin-bottom: 0; display: flex; flex-direction: column; justify-content: space-between;">
                 <div>
-                    <div class="stitle">
+                    <div class="stitle" style="display: flex; align-items: center; gap: 10px;">
                         <i data-lucide="trending-up"></i> Proyeksi Sweet Spot Kurva Maksimal
-                        <span class="tooltip"><i data-lucide="help-circle" style="width:16px; height:16px;"></i>
+                        <span class="tooltip"><i data-lucide="help-circle" style="width:12px; height:12px;"></i>
                             <span class="tooltiptext">Grafik ini memprediksi titik harga ideal. Titik tertinggi kurva menunjukkan harga jual di mana profit Anda maksimal sebelum pasar mulai menolak karena terlalu mahal.</span>
                         </span>
                     </div>
@@ -786,9 +812,9 @@
 
         <div class="g2" style="margin-bottom: 1rem;">
             <div class="s">
-                <div class="stitle">
+                <div class="stitle" style="display: flex; align-items: center; gap: 10px;">
                     <i data-lucide="banknote"></i> Detail Biaya Finansial Pemasaran
-                    <span class="tooltip"><i data-lucide="help-circle" style="width:16px; height:16px;"></i>
+                    <span class="tooltip"><i data-lucide="help-circle" style="width:12px; height:12px;"></i>
                         <span class="tooltiptext">Gunakan 'Detail lanjutan' untuk memecah biaya transaksi, komisi sales, dan biaya iklan agar Anda bisa menghitung ROAS dan laba bersih dengan presisi.</span>
                     </span>
                 </div>
@@ -844,9 +870,9 @@
         </div>
 
         <div class="s">
-            <div class="stitle">
+            <div class="stitle" style="display: flex; align-items: center; gap: 10px;">
                 <i data-lucide="crosshair"></i> Matriks Titik Ungkit Sektoral & Komparasi Pareto
-                <span class="tooltip"><i data-lucide="help-circle" style="width:16px; height:16px;"></i>
+                <span class="tooltip"><i data-lucide="help-circle" style="width:12px; height:12px;"></i>
                     <span class="tooltiptext">Mesin optimasi otomatis. Masukkan target profit Anda, akan ada analisis strategi (A, B) untuk mengetahui kombinasi Traffic dan Konversi yang paling efisien. Opsi C untuk melihat kustomisasi </span>
                 </span>
             </div>
@@ -873,9 +899,9 @@
         </div>
 
         <div class="s">
-            <div class="stitle">
+            <div class="stitle" style="display: flex; align-items: center; gap: 10px;">
                 <i data-lucide="sparkles"></i> Papan Strategi Rekomendasi Taktis
-                <span class="tooltip"><i data-lucide="help-circle" style="width:16px; height:16px;"></i>
+                <span class="tooltip"><i data-lucide="help-circle" style="width:12px; height:12px;"></i>
                     <span class="tooltiptext">Analisis cerdas berdasarkan angka simulasi Anda. Memberikan peringatan jika konversi Anda di bawah standar industri atau jika biaya iklan terlalu berisiko.</span>
                 </span>
             </div>
@@ -883,9 +909,9 @@
         </div>
 
         <div class="s" style="margin-top: 1.5rem;">
-            <div class="stitle">
+            <div class="stitle" style="display: flex; align-items: center; gap: 10px;">
                 <i data-lucide="cpu"></i> Integrasi Laporan Chatbot AI (Narasi & JSON Data)
-                <span class="tooltip"><i data-lucide="help-circle" style="width:16px; height:16px;"></i>
+                <span class="tooltip"><i data-lucide="help-circle" style="width:12px; height:12px;"></i>
                     <span class="tooltiptext">Salin data terstruktur ini untuk berkonsultasi dengan ChatGPT atau Gemini. AI akan memberikan analisis narasi yang mendalam berdasarkan angka simulasi ini.</span>
                 </span>
             </div>
@@ -919,20 +945,21 @@
             </div>
             <div class="accordion-content" id="owner-panel-content" style="padding: 1rem 0;">
                 <div class="g2" style="align-items: center;">
-                    <div class="prow">
-                        <label>Biaya Operasional Tetap / Fixed Cost (Rp)</label>
-                        <input type="number" id="in-fixed" value="30000000" min="0" step="500000">
+                    <div class="mc" style="background: #fff; border: 1px solid var(--color-primary);">
+                        <div class="ml" style="margin-bottom: 8px;">Biaya Operasional Tetap / Fixed Cost (Rp) <span class="tooltip"><i data-lucide="help-circle" style="width:12px; height:12px;"></i><span class="tooltiptext">Biaya gaji, sewa kantor, dan beban tetap lainnya yang harus dibayar meski tidak ada penjualan.</span></span></div>
+                        <input type="number" id="in-fixed" value="30000000" min="0" step="500000" 
+                            style="width: 100%; font-size: 20px; font-weight: 700; padding: 12px; border-radius: 10px; border: 1px solid var(--color-primary); background: var(--color-background-primary); color: var(--color-text-primary); outline: none; transition: all 0.2s;">
                     </div>
-                    <div class="mc" style="background: #fff; border: 1px solid var(--color-border-secondary);">
-                        <div class="ml" style="color:var(--color-text-warning)">Net Profit Finansial Perusahaan</div>
-                        <div id="owner-net-profit" class="mv" style="font-size: 20px;">Rp 0</div>
+                    <div class="mc" style="background: #fff; border: 1px solid var(--color-primary);">
+                        <div class="ml" style="color:var(--color-text-warning); margin-bottom: 8px;">Net Profit Finansial Perusahaan</div>
+                        <div id="owner-net-profit" class="mv" style="font-size: 20px; font-weight: 700; padding: 12px; border-radius: 10px; border: 1px solid var(--color-primary); background: var(--color-background-primary); min-height: 54px; display: flex; align-items: center; gap: 8px;">Rp 0</div>
                     </div>
                 </div>
                 <!-- Owner's tool advisory zone -->
                 <div id="owner-advisory-zone" style="margin-top: 15px;"></div>
 
                 <div style="margin-top: 20px; border-top: 1px solid var(--color-border-tertiary); padding-top: 15px;">
-                    <div class="stitle" style="font-size: 12px; margin-bottom: 10px;">
+                    <div class="stitle" style="font-size: 14px; margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
                         <i data-lucide="cpu" style="width:14px; height:14px;"></i> Mega-Prompt AI: Laporan Strategis Owner (Eksklusif)
                     </div>
                     <div class="tabbar">
@@ -1379,7 +1406,7 @@
                 const btn = document.getElementById('lk-' + k);
                 if (btn) {
                     btn.className = 'lockbtn' + (LOCKS[k] ? ' locked' : '');
-                    btn.innerHTML = LOCKS[k] ? '<i data-lucide="lock-keyhole"></i>' : '<i data-lucide="lock-keyhole-open"></i>';
+                    btn.innerHTML = LOCKS[k] ? '<i data-lucide="lock-keyhole" style="width:14px; height:14px;"></i>' : '<i data-lucide="lock-keyhole-open" style="width:14px; height:14px;"></i>';
                     lucide.createIcons();
                 }
             });
@@ -1595,7 +1622,7 @@
                 <div class="mc"><div class="ml">Gross Margin %</div><div class="mv">${fmtP(m.marginPct)}</div></div>
                 <div class="mc"><div class="ml">
                     Biaya Marketing
-                    <span class="tooltip"><i data-lucide="help-circle" style="width:14px; height:14px;"></i>
+                    <span class="tooltip"><i data-lucide="help-circle" style="width:12px; height:12px;"></i>
                         <span class="tooltiptext">Total biaya pemasaran. Detail pengisian (Ads, Fee Platform, Komisi) dapat dilakukan di panel "Detail Biaya Finansial" di bawah.</span>
                     </span>
                 </div><div class="mv warn">${fmt(m.mktTotal)}</div></div>
@@ -1616,7 +1643,12 @@
             $('roas-val').textContent = m.roas.toFixed(1) + 'x';
             
             const ownerNetProfitEl = $('owner-net-profit');
-            ownerNetProfitEl.textContent = fmt(m.netProfit);
+            let netProfitText = fmt(m.netProfit);
+            if (m.netProfit > 0 && m.totalRev > 0) {
+                const netMargin = (m.netProfit / m.totalRev) * 100;
+                netProfitText += ` <span style="font-size: 12px; font-weight: normal; color: var(--color-text-secondary);">(${netMargin.toFixed(1)}% dari Omset)</span>`;
+            }
+            ownerNetProfitEl.innerHTML = netProfitText;
             ownerNetProfitEl.className = m.netProfit < 0 ? 'mv bad' : 'mv good';
 
             renderVisualShadowIndicators(inputs);
@@ -1961,6 +1993,7 @@
                 cogs: inputs.cogs,
                 traffic: inputs.traffic,
                 cr: inputs.cr,
+                retention: inputs.retention,
                 grossProfit: m.grossProfit
             });
 
@@ -1976,19 +2009,52 @@
             const crPct = inputs.cr * 100;
             const bizCat = document.getElementById('biz-cat').value;
 
-            // 1. Analisis Konversi (CR) vs Standar Industri
-            if (crPct < biz.crNorm) {
-                let crAdvice = "";
-                if (bizCat.includes('ecomm')) {
-                    crAdvice = "sebaiknya <strong>naikkan CR</strong> dengan optimasi visual aset produk (foto/video), penajaman copywriting manfaat, dan menyederhanaan alur checkout digital.";
-                } else if (bizCat.includes('retail')) {
-                    crAdvice = "sebaiknya <strong>naikkan CR</strong> dengan memperbaiki tata letak barang (merchandising), penawaran paket bundling di kasir, serta pelatihan staf toko.";
-                } else {
-                    crAdvice = "sebaiknya <strong>naikkan CR</strong> dengan memperkuat portfolio studi kasus klien dan mempercepat waktu respon tim sales terhadap lead prospek.";
+            // 1. AUDIT FUNDAMENTAL (BERDASARKAN BASELINE RIIL)
+            if (isBaselineLocked) {
+                const baseCrPct = storedBaselineData.cr * 100;
+                if (baseCrPct < biz.crNorm) {
+                    let crAdvice = "";
+                    if (bizCat.includes('ecomm')) crAdvice = "optimasi visual aset dan copywriting produk.";
+                    else if (bizCat.includes('retail')) crAdvice = "perbaikan merchandising dan training staf.";
+                    else crAdvice = "perkuat portfolio studi kasus klien.";
+                    
+                    zone.innerHTML += `
+                        <div class="narr warn-alert">
+                            <i data-lucide="alert-circle" style="width:14px; height:14px; vertical-align:middle; margin-right:4px;"></i> 
+                            <strong>DIAGNOSA BASELINE:</strong> CR riil Anda (${baseCrPct.toFixed(1)}%) di bawah rata-rata industri (${biz.crNorm}%). Skenario simulasi saat ini bersifat 'What-if', namun secara fundamental Anda wajib melakukan ${crAdvice}
+                        </div>`;
                 }
-                zone.innerHTML += `<div class="narr warn-alert"><i class="ti ti-activity-heartbeat"></i> <strong>Audit Performa Konversi:</strong> Rasio Anda (${fmtP(crPct)}) masih di bawah rata-rata ${biz.label} (${fmtP(biz.crNorm)}), ${crAdvice}</div>`;
-            } else {
-                zone.innerHTML += `<div class="narr" style="border-left-color: #10b981;"><i class="ti ti-circle-check"></i> <strong>Konversi Solid:</strong> Rasio konversi Anda (${fmtP(crPct)}) sudah melampaui standar industri (${fmtP(biz.crNorm)}). Infrastruktur penjualan Anda sudah solid.</div>`;
+            }
+
+            // 2. ANALISIS PROGRES SKENARIO AKTIF VS BASELINE
+            if (isBaselineLocked) {
+                const baseMetrics = calcMetrics(storedBaselineData.price, storedBaselineData.cogs, storedBaselineData.traffic, storedBaselineData.cr, storedBaselineData.fixed, storedBaselineData.retention);
+                const deltaProfit = m.grossProfit - baseMetrics.grossProfit;
+                
+                if (deltaProfit > 0) {
+                    zone.innerHTML += `<div class="narr" style="border-left-color: #10b981; background: #f0fdf4;"><i data-lucide="trending-up" style="width:14px; height:14px; vertical-align:middle; margin-right:4px;"></i> <strong>Analisis Skenario:</strong> Eksperimen ini berpotensi meningkatkan profit sebesar <strong>${fmt(deltaProfit)}</strong> dibanding kondisi Baseline.</div>`;
+                } else if (deltaProfit < 0) {
+                    zone.innerHTML += `<div class="narr" style="border-left-color: #ef4444; background: #fef2f2;"><i data-lucide="trending-down" style="width:14px; height:14px; vertical-align:middle; margin-right:4px;"></i> <strong>Peringatan Skenario:</strong> Langkah ini menurunkan profit <strong>${fmt(Math.abs(deltaProfit))}</strong> dibanding Baseline. Periksa kembali kebijakan harga dan elastisitas.</div>`;
+                }
+            }
+
+            // 3. KOMPARASI TERHADAP SKENARIO YANG DISIMPAN
+            if (savedScenarios.length > 0) {
+                const bestSaved = savedScenarios.reduce((prev, curr) => (prev.grossProfit > curr.grossProfit) ? prev : curr);
+                if (m.grossProfit > bestSaved.grossProfit) {
+                    zone.innerHTML += `<div class="narr" style="border-left-color: #8b5cf6; background: #f5f3ff;"><i data-lucide="award" style="width:14px; height:14px; vertical-align:middle; margin-right:4px;"></i> <strong>Eksperimen Terbaik:</strong> Simulasi aktif saat ini mengungguli semua skenario yang pernah Anda simpan!</div>`;
+                } else if (m.grossProfit < bestSaved.grossProfit) {
+                    zone.innerHTML += `<div class="narr" style="border-left-color: #64748b; background: #f8fafc;"><i data-lucide="info" style="width:14px; height:14px; vertical-align:middle; margin-right:4px;"></i> <strong>Info Komparasi:</strong> <code>${bestSaved.label}</code> masih lebih menguntungkan (Selisih: ${fmt(bestSaved.grossProfit - m.grossProfit)}) dibanding simulasi saat ini.</div>`;
+                }
+            }
+
+            // 4. Analisis Konversi (CR) vs Standar Industri (Fallback jika tanpa Baseline)
+            if (!isBaselineLocked) {
+                if (crPct < biz.crNorm) {
+                    zone.innerHTML += `<div class="narr warn-alert"><i data-lucide="activity" style="width:14px; height:14px; vertical-align:middle; margin-right:4px;"></i> <strong>Audit Konversi:</strong> Rasio ${fmtP(crPct)} di bawah rata-rata industri. Fokus pada kualitas traffic.</div>`;
+                } else {
+                    zone.innerHTML += `<div class="narr" style="border-left-color: #10b981;"><i data-lucide="check-circle" style="width:14px; height:14px; vertical-align:middle; margin-right:4px;"></i> <strong>Konversi Solid:</strong> Rasio konversi Anda melampaui standar industri. Infrastruktur penjualan Anda sudah solid.</div>`;
+                }
             }
 
             // 2. Rekomendasi Prioritas (Traffic vs CR) berdasarkan Karakteristik Sektoral
@@ -2006,16 +2072,23 @@
                 const bepUnits = inputs.fixed / marginPerUnit;
                 if (m.totalQty < bepUnits) {
                     const lack = Math.ceil(bepUnits - m.totalQty);
+                    const marginGap = m.totalQty > 0 ? (inputs.fixed - m.grossProfit) / m.totalQty : 0;
                     if (ownerZone) {
-                        ownerZone.innerHTML = `<div style="font-size: 11px; color: var(--color-text-danger); border-top: 1px dashed var(--color-border-tertiary); padding-top: 10px;">
-                            <i class="ti ti-alert-triangle"></i> <strong>Owner's tool:</strong> Profit operasional belum mampu menutup biaya tetap. Butuh tambahan volume <strong>${fmtN(lack)} unit</strong> untuk mencapai Breakeven.
+                        ownerZone.innerHTML = `<div class="narr warn-alert" style="font-size: 14px; border-left-width: 6px;">
+                            <i data-lucide="alert-triangle" style="width:18px; height:18px; vertical-align:middle; margin-right:8px;"></i> 
+                            <strong>PERINGATAN OPERASIONAL:</strong> Laba kotor belum menutupi biaya tetap. <br>
+                            <span style="display:block; margin-top:8px; font-size:13px; font-weight:normal;">
+                                • Solusi Volume: Tambah penjualan minimal <strong>${fmtN(lack)} unit</strong> lagi.<br>
+                                • Solusi Margin: Atau naikkan margin kontribusi sebesar <strong>${fmt(marginGap)}</strong> per unit.
+                            </span>
                         </div>`;
                     }
                 }
             } else if (m.grossProfit <= 0) {
                 if (ownerZone) {
-                    ownerZone.innerHTML = `<div style="font-size: 11px; color: var(--color-text-danger); border-top: 1px dashed var(--color-border-tertiary); padding-top: 10px;">
-                        <i class="ti ti-skull"></i> <strong>Owner's tool:</strong> Margin kontribusi negatif atau nol. Evaluasi Harga Jual atau HPP segera untuk menghindari kerugian berkelanjutan.
+                    ownerZone.innerHTML = `<div class="narr warn-alert" style="font-size: 14px; border-left-width: 6px;">
+                        <i data-lucide="skull" style="width:18px; height:18px; vertical-align:middle; margin-right:8px;"></i> 
+                        <strong>KRITIS:</strong> Margin kontribusi negatif. Bisnis merugi di setiap unit yang terjual. Segera evaluasi Harga Jual atau HPP!
                     </div>`;
                 }
             }
@@ -2023,22 +2096,25 @@
             // 4. Analisis ROAS (Hanya di mode Advanced)
             if (mktTab === 'adv' && m.roas > 0) {
                 if (m.roas < 2.5) {
-                    zone.innerHTML += `<div class="narr" style="border-left-color: #f59e0b; background: #fffbeb; color: #92400e;"><i class="ti ti-chart-arrows"></i> <strong>Efisiensi Iklan Rendah:</strong> ROAS ${m.roas.toFixed(1)}x menunjukkan biaya akuisisi terlalu mahal. Perbaiki materi kreatif iklan atau naikkan nilai belanja rata-rata (AOV).</div>`;
+                    zone.innerHTML += `<div class="narr" style="border-left-color: #f59e0b; background: #fffbeb; color: #92400e;"><i data-lucide="bar-chart-3" style="width:14px; height:14px; vertical-align:middle; margin-right:4px;"></i> <strong>Efisiensi Iklan Rendah:</strong> ROAS ${m.roas.toFixed(1)}x menunjukkan biaya akuisisi terlalu mahal. Perbaiki materi kreatif iklan atau naikkan AOV.</div>`;
                 } else if (m.roas > 6) {
-                    zone.innerHTML += `<div class="narr" style="border-left-color: #3b82f6; background: #eff6ff; color: #1e40af;"><i class="ti ti-trending-up"></i> <strong>Peluang Scaling:</strong> ROAS Anda sangat sehat (${m.roas.toFixed(1)}x). Saatnya menambah budget akuisisi di Klaster C untuk mendominasi pasar.</div>`;
+                    zone.innerHTML += `<div class="narr" style="border-left-color: #3b82f6; background: #eff6ff; color: #1e40af;"><i data-lucide="trending-up" style="width:14px; height:14px; vertical-align:middle; margin-right:4px;"></i> <strong>Peluang Scaling:</strong> ROAS Anda sangat sehat (${m.roas.toFixed(1)}x). Saatnya menambah budget akuisisi di Klaster C.</div>`;
                 }
             }
 
             // 5. Tip Spesifik Model Bisnis
             if (bizCat === 'ecomm-niche') {
-                zone.innerHTML += `<div class="narr"><i class="ti ti-messages"></i> <strong>Saran Karakteristik Niche:</strong> Segmen spesialis bertumpu pada retensi komunitas. Fokus bangun lingkaran loyalitas (WA Group/Telegram) karena konversi pembeli lama jauh lebih murah dibanding mencari pelanggan baru.</div>`;
+                zone.innerHTML += `<div class="narr"><i data-lucide="users" style="width:14px; height:14px; vertical-align:middle; margin-right:4px;"></i> <strong>Saran Niche:</strong> Fokus bangun lingkaran loyalitas (WA Group/Telegram) karena konversi pembeli lama jauh lebih murah.</div>`;
             }
+            
+            lucide.createIcons();
         }
 
         function renderReportOutput(inputs, m, biz) {
             const box = document.getElementById('rbox');
             const tipsElements = document.getElementById('advisory-alerts-zone').querySelectorAll('.narr');
             let compiledTipsText = '';
+            const bizDetail = $('biz-detail').value || "Tidak disebutkan secara spesifik";
             let compiledTipsArray = [];
             tipsElements.forEach((el, index) => { 
                 compiledTipsText += `${index + 1}. ${el.textContent}\n`; 
@@ -2059,6 +2135,25 @@
                 kol_event: parseFormattedNum('m-kol')
             };
 
+            // Membangun ringkasan skenario eksperimen dan baseline untuk konteks AI
+            let savedScenariosText = "";
+            if (savedScenarios.length > 0) {
+                savedScenariosText = "PERBANDINGAN SKENARIO EKSPERIMEN (SAVED SCENARIOS):\n";
+                savedScenarios.forEach(s => {
+                    savedScenariosText += `- ${s.label}: AOV ${fmt(s.price)} | Traffic ${fmtN(s.traffic)} | CR ${(s.cr * 100).toFixed(2)}% | Retensi ${(s.retention * 100).toFixed(0)}% | Profit ${fmt(s.grossProfit)}\n`;
+                });
+                savedScenariosText += "\n";
+            }
+
+            let baselineSummaryText = "";
+            if (isBaselineLocked) {
+                const b = storedBaselineData;
+                const bm = calcMetrics(b.price, b.cogs, b.traffic, b.cr, b.fixed, b.retention);
+                baselineSummaryText = `DATA BASELINE (KONDISI AWAL SAAT INI):
+- Harga Jual: ${fmt(b.price)} | HPP: ${fmt(b.cogs)}
+- Traffic: ${fmtN(b.traffic)} | CR: ${(b.cr * 100).toFixed(1)}% | Profit: ${fmt(bm.grossProfit)}\n\n`;
+            }
+
             let mktInfo = mktTab === 'simple' ? 
                 `- Mode: Blended CPC\n- Biaya per Klik (CPC): ${fmt(mktData.cpc)}` :
                 `- Klaster A (Platform): Fee ${mktData.plat_fee_pct}% + PGW ${mktData.pgw_fee_pct}% + Subsidi ${fmt(mktData.ship_sub)}/unit\n` +
@@ -2073,10 +2168,12 @@
                     },
                     data_metrik: {
                         model_bisnis: biz.label,
+                        deskripsi_bisnis: bizDetail,
                         harga_jual_aov: inputs.price,
                         hpp_cogs_unit: inputs.cogs,
                         traffic_pengunjung: inputs.traffic,
                         conversion_rate_aktual_pct: inputs.cr * 100,
+                        retention_pct: inputs.retention * 100,
                         rata_rata_industri_cr_pct: biz.crNorm,
                         estimasi_omset: m.totalRev,
                         gross_profit_marketing: m.grossProfit,
@@ -2086,22 +2183,26 @@
                     rekomendasi_sistem: compiledTipsArray.length > 0 ? compiledTipsArray : ["Seluruh metrik saat ini terpantau berada dalam batas wajar industri."],
                     instruksi_analisis_ai: [
                         "Berikan evaluasi mendalam apakah struktur harga (AOV) dan biaya (HPP) sudah memberikan ruang margin yang sehat untuk melakukan scaling.",
+                        "Bandingkan performa Skenario Aktif dengan Baseline dan Skenario Eksperimen lainnya untuk menentukan mana yang paling 'feasible' (mudah dijalankan dengan risiko terkontrol).",
                         "Berdasarkan data ROAS dan perbandingan CR terhadap rata-rata industri, identifikasi di mana kebocoran profit terbesar terjadi.",
                         "Berikan 3 langkah taktis prioritas yang harus dilakukan pemilik bisnis minggu ini untuk meningkatkan laba bersih tanpa harus menaikkan budget iklan secara drastis."
                     ],
                     metadata: { timestamp: new Date().toISOString() },
+                    baseline: isBaselineLocked ? storedBaselineData : null,
                     saved_scenarios: savedScenarios
                 };
                 box.textContent = JSON.stringify(jsonData, null, 2);
             } else {
                 box.textContent = `Bertindaklah sebagai Senior Business Consultant dan Ahli Strategi Growth Hacking. Analisis data simulasi bisnis di bawah ini dan berikan rekomendasi strategis yang tajam untuk meningkatkan profitabilitas perusahaan.
 
-DATA METRIK BISNIS SAAT INI:
+${baselineSummaryText}DATA METRIK BISNIS SAAT INI (SKENARIO AKTIF):
 - Model Bisnis: ${biz.label}
+- Deskripsi Spesifik: ${bizDetail}
 - Harga Jual (AOV): ${fmt(inputs.price)}
 - HPP (COGS) per Unit: ${fmt(inputs.cogs)}
 - Traffic Pengunjung: ${fmtN(inputs.traffic)} Kunjungan/Bulan
 - Conversion Rate (CR): ${fmtP(inputs.cr * 100)} (Rata-rata Industri: ${fmtP(biz.crNorm)})
+- Retensi Pelanggan: ${fmtP(inputs.retention * 100)}
 - Estimasi Omset: ${fmt(m.totalRev)}
 - Gross Profit: ${fmt(m.grossProfit)}
 - Blended ROAS: ${m.roas.toFixed(1)}x
@@ -2109,13 +2210,14 @@ DATA METRIK BISNIS SAAT INI:
 STRUKTUR BIAYA MARKETING:
 ${mktInfo}
 
-REKOMENDASI SISTEM CALCULATOR:
+${savedScenariosText}REKOMENDASI SISTEM CALCULATOR:
 ${compiledTipsText || "Seluruh metrik saat ini terpantau berada dalam batas wajar industri."}
 
 INSTRUKSI ANALISIS UNTUK AI:
 1. Berikan evaluasi mendalam apakah struktur harga (AOV) dan biaya (HPP) sudah memberikan ruang margin yang sehat untuk melakukan scaling.
-2. Berdasarkan data ROAS dan perbandingan CR terhadap rata-rata industri, identifikasi di mana kebocoran profit terbesar terjadi.
-3. Berikan 3 langkah taktis prioritas yang harus dilakukan pemilik bisnis minggu ini untuk meningkatkan laba bersih tanpa harus menaikkan budget iklan secara drastis.`;
+2. Bandingkan performa Skenario Aktif dengan Baseline dan skenario yang disimpan. Mana yang paling logis dan memungkinkan untuk dieksekusi tim di lapangan (feasible) berdasarkan perubahan Traffic dan CR yang dibutuhkan?
+3. Berdasarkan data ROAS dan perbandingan CR terhadap rata-rata industri, identifikasi di mana kebocoran profit terbesar terjadi.
+4. Berikan 3 langkah taktis prioritas yang harus dilakukan pemilik bisnis minggu ini untuk meningkatkan laba bersih tanpa harus menaikkan budget iklan secara drastis.`;
             }
 
             // RENDER OWNER EXCLUSIVE REPORT
@@ -2130,6 +2232,7 @@ INSTRUKSI ANALISIS UNTUK AI:
                     },
                     data_sensitif_owner: {
                         fixed_costs: inputs.fixed,
+                        deskripsi_bisnis: bizDetail,
                         net_profit_akhir: m.netProfit,
                         margin_kontribusi_per_unit: (m.grossProfit / m.totalQty) || 0,
                         break_even_point_units: (inputs.fixed / ((m.grossProfit / m.totalQty) || 1))
@@ -2154,6 +2257,7 @@ INSTRUKSI ANALISIS UNTUK AI:
 
 RINGKASAN EKSEKUTIF FINANSIAL:
 - Biaya Tetap (Overhead): ${fmt(inputs.fixed)}
+- Bisnis: ${bizDetail}
 - Laba Bersih (Net Profit): ${fmt(m.netProfit)}
 - Harga Jual (AOV): ${fmt(inputs.price)}
 - Gross Profit: ${fmt(m.grossProfit)}
