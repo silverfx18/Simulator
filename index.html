@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pepepipi Hub — Marketing Suite</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            /* Pepepipi Brand Colors */
+            --color-primary: #BDE2F7;       /* Pastel Blue */
+            --color-marketing: #FFC89A;     /* Pastel Orange */
+            --color-accent: #FFD1E6;        /* Pastel Pink */
+            --color-success: #A7E3C2;
+            --color-warning: #FFE082;
+            --color-danger: #FFB3A7;
+            --color-neutral: #EAEAEA;
+            --color-hover: #FFF4EA;
+            
+            /* Backgrounds */
+            --color-bg: #FAFAF8;
+            --color-card-bg: #FFFFFF;
+            --color-sidebar: #F3F8FC;
+            
+            /* Text Colors */
+            --color-text-primary: #1E293B;
+            --color-text-secondary: #64748B;
+            --color-text-tertiary: #94A3B8;
+            
+            --radius-custom: 12px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            background: var(--color-bg);
+            color: var(--color-text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Top Friendly Navigation Bar (Stripe Dashboard style) */
+        .navbar {
+            background: var(--color-card-bg);
+            padding: 1.25rem 2.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--color-neutral);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+        }
+
+        .brand-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-logo {
+            background: var(--color-primary);
+            width: 38px;
+            height: 38px;
+            border-radius: var(--radius-custom);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .brand-name {
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .user-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            background: var(--color-sidebar);
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--color-text-secondary);
+            border: 1px solid rgba(234, 234, 234, 0.8);
+        }
+
+        /* Main Workspace Content Arena */
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 3.5rem 2rem;
+            flex: 1;
+        }
+
+        /* Typography Hierarchy */
+        h1 { font-size: 32px; font-weight: 700; color: var(--color-text-primary); letter-spacing: -0.5px; }
+        h2 { font-size: 24px; font-weight: 600; color: var(--color-text-primary); margin-bottom: 1.5rem; }
+        p { font-size: 14px; font-weight: 400; color: var(--color-text-secondary); }
+        .caption { font-size: 12px; font-weight: 400; color: var(--color-text-tertiary); }
+
+        .hero-section {
+            margin-bottom: 3.5rem;
+            max-width: 650px;
+        }
+
+        .hero-section p {
+            margin-top: 8px;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        /* Modern Grid ala Canva & Linear */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.75rem;
+        }
+
+        /* Interactive Dynamic Cards Architecture */
+        .tool-card {
+            background: var(--color-card-bg);
+            border-radius: var(--radius-custom);
+            padding: 1.75rem;
+            border: 1px solid rgba(234, 234, 234, 0.7);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            text-decoration: none;
+            color: inherit;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--color-marketing);
+            box-shadow: 0 8px 24px rgba(255, 200, 154, 0.25);
+        }
+
+        .tool-icon-wrapper {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.25rem;
+            transition: transform 0.2s ease;
+        }
+
+        .tool-card:hover .tool-icon-wrapper {
+            transform: scale(1.05);
+        }
+
+        .tool-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--color-text-primary);
+            margin-bottom: 6px;
+        }
+
+        .tool-desc {
+            font-size: 13px;
+            color: var(--color-text-secondary);
+            line-height: 1.5;
+            margin-bottom: 1.5rem;
+            flex: 1;
+        }
+
+        .tool-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-top: 1px solid var(--color-neutral);
+            padding-top: 1rem;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--color-text-primary);
+        }
+
+        .arrow-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            transition: gap 0.2s ease;
+        }
+
+        .tool-card:hover .arrow-link {
+            gap: 8px;
+            color: #0B447C;
+        }
+
+        /* Future Empty State Slots Architecture (Hubspot/Notion Style) */
+        .tool-card.placeholder {
+            background: rgba(243, 248, 2FC, 0.4);
+            border: 2px dashed var(--color-neutral);
+            box-shadow: none;
+            cursor: not-allowed;
+        }
+
+        .tool-card.placeholder:hover {
+            transform: none;
+            border-color: var(--color-neutral);
+            box-shadow: none;
+        }
+
+        .tool-card.placeholder .tool-icon-wrapper {
+            background: #EAEAEA !important;
+        }
+
+        .badge {
+            font-size: 11px;
+            font-weight: 600;
+            padding: 3px 8px;
+            border-radius: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .badge-active { background: #E8F5E9; color: #1B5E20; }
+        .badge-soon { background: #F1F5F9; color: #64748B; }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            border-top: 1px solid var(--color-neutral);
+            background: var(--color-sidebar);
+            margin-top: auto;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="brand-section">
+            <div class="brand-logo">
+                <i data-lucide="layers" style="width: 22px; height: 22px; color: #0B447C;"></i>
+            </div>
+            <span class="brand-name">Pepepipi Hub</span>
+        </div>
+        <div class="user-badge">
+            <i data-lucide="user" style="width: 14px; height: 14px;"></i>
+            <span>Divisi Pemasaran</span>
+        </div>
+    </nav>
+
+    <main class="container">
+        
+        <section class="hero-section">
+            <h1>Workspace Aplikasi Pemasaran</h1>
+            <p>Selamat datang di pusat kendali Pepepipi. Jalankan simulasi, analisis performa unit ekonomi, dan optimalkan strategi pemasaran dari satu tempat terintegrasi.</p>
+        </section>
+
+        <section>
+            <h2>Pilih Alat Analisis</h2>
+            <div class="tools-grid">
+                
+                <a href="Pepi Marketing Analysis Tools v3.html" class="tool-card">
+                    <div>
+                        <div class="tool-icon-wrapper" style="background: var(--color-marketing);">
+                            <i data-lucide="bar-chart-3" style="width: 22px; height: 22px; color: #7A3E00;"></i>
+                        </div>
+                        <div class="tool-title">Marketing Analysis v3</div>
+                        <div class="tool-desc">Simulasikan keputusan harga tunggal (AOV), struktur elastisitas HPP pasar massal maupun niche, serta hitung rekomendasi titik ungkit finansial Pareto.</div>
+                    </div>
+                    <div class="tool-footer">
+                        <span class="badge badge-active">Siap Digunakan</span>
+                        <span class="arrow-link">Buka Alat <i data-lucide="arrow-right" style="width: 16px; height: 16px;"></i></span>
+                    </div>
+                </a>
+
+                <div class="tool-card placeholder">
+                    <div>
+                        <div class="tool-icon-wrapper">
+                            <i data-lucide="target" style="width: 22px; height: 22px; color: var(--color-text-tertiary);"></i>
+                        </div>
+                        <div class="tool-title" style="color: var(--color-text-secondary);">Audience Segmentation AI</div>
+                        <div class="tool-desc">Modul pembagi segmentasi perilaku pelanggan makro, kelompok retensi kohort, serta prediksi LTV (Lifetime Value) berbasis machine learning.</div>
+                    </div>
+                    <div class="tool-footer">
+                        <span class="badge badge-soon">Segera Hadir</span>
+                        <span style="color: var(--color-text-tertiary); font-size: 12px;">Dalam Pengembangan</span>
+                    </div>
+                </div>
+
+                <div class="tool-card placeholder">
+                    <div>
+                        <div class="tool-icon-wrapper">
+                            <i data-lucide="sparkles" style="width: 22px; height: 22px; color: var(--color-text-tertiary);"></i>
+                        </div>
+                        <div class="tool-title" style="color: var(--color-text-secondary);">Campaign Budget Planner</div>
+                        <div class="tool-desc">Perencanaan alokasi anggaran iklan digital lintas platform (Meta, Google, TikTok) terotomatisasi dengan kalkulator optimasi ROAS terbalik.</div>
+                    </div>
+                    <div class="tool-footer">
+                        <span class="badge badge-soon">Segera Hadir</span>
+                        <span style="color: var(--color-text-tertiary); font-size: 12px;">Dalam Pengembangan</span>
+                    </div>
+                </div>
+
+                <div class="tool-card placeholder">
+                    <div>
+                        <div class="tool-icon-wrapper">
+                            <i data-lucide="file-text" style="width: 22px; height: 22px; color: var(--color-text-tertiary);"></i>
+                        </div>
+                        <div class="tool-title" style="color: var(--color-text-secondary);">Automated Reporting Suite</div>
+                        <div class="tool-desc">Eksportir otomatis berkas laporan eksekutif bulanan langsung ke dalam format presentasi Canva atau dokumen terstruktur Notion dalam satu klik.</div>
+                    </div>
+                    <div class="tool-footer">
+                        <span class="badge badge-soon">Segera Hadir</span>
+                        <span style="color: var(--color-text-tertiary); font-size: 12px;">Dalam Pengembangan</span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <p class="caption" style="color: var(--color-text-secondary);">
+            &copy; 2026 Pepepipi Ecosystem. Seluruh hak cipta dilindungi undang-undang. &bull; Dioptimalkan untuk Divisi Pemasaran.
+        </p>
+    </footer>
+
+    <script>
+        // Inisialisasi ikon Lucide secara global dengan goresan seragam
+        lucide.createIcons({
+            attrs: {
+                'stroke-width': 2,
+                'stroke-linecap': 'round',
+                'stroke-linejoin': 'round'
+            }
+        });
+    </script>
+</body>
+
+</html>
