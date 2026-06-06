@@ -698,6 +698,13 @@
                             <input type="number" id="in-blended-pct" value="15" min="1" max="99" placeholder="15" style="width:52px; font-size:11px; font-weight:bold; border:none; background:transparent; outline:none;">
                         </div>
                         <span style="font-size:11px; color:var(--color-text-info); font-weight:600;">%</span>
+                        <label style="font-size: 11px; color: var(--color-text-secondary); cursor: pointer; display: flex; align-items: center; gap: 4px; margin-left: 8px;">
+                            <input type="checkbox" id="chk-price-mode" onchange="update()"> 
+                            <strong>Mode Harga</strong>
+                            <span class="tooltip"><i data-lucide="help-circle" style="width:12px; height:12px;"></i>
+                                <span class="tooltiptext">Dicentang: AOV naik via kenaikan harga unit (Efek Elastisitas Aktif). Tidak dicentang: AOV naik via Upsell/Cross-sell (Margin Terkunci, Volume Tetap).</span>
+                            </span>
+                        </label>
                         <button class="tab" id="btn-cap-toggle" onclick="toggleCapMode()" style="font-size: 10px; padding: 2px 8px; height: 24px;">Izinkan HPP &gt; AOV</button>
                     </div>
                 </div>
@@ -1477,9 +1484,10 @@
 
         function applyLiveElasticity(price, tDropFactor, crDropFactor) {
             const warningEl = document.getElementById('price-warning');
+            const priceMode = document.getElementById('chk-price-mode').checked;
 
-            // Hanya jalankan logika modifikasi elastisitas jika baseline sudah dikunci
-            if (!isBaselineLocked) {
+            // Hanya jalankan jika baseline terkunci DAN dalam Mode Harga
+            if (!isBaselineLocked || !priceMode) {
                 warningEl.style.display = 'none';
                 return;
             }
@@ -1588,22 +1596,36 @@
                 `Custom Sektoral (Drop Traffic: -${(mods.tDrop * 100).toFixed(0)}% | Drop CR: -${(mods.crDrop * 100).toFixed(0)}%)` :
                 `${biz.label} (Default Industri: Drop Traffic -${biz.tDrop}% | Drop CR -${biz.crDrop}%)`;
 
-            const currentPrice = parseFormattedNum('in-price');
+            let currentPrice = parseFormattedNum('in-price');
             let currentCogs = parseFormattedNum('in-cogs');
             const blendedPctEl = $('in-blended-pct');
-            const cogsEl = $('in-cogs');
-            const slCogsEl = $('sl-cogs');
+            const priceMode = $('chk-price-mode').checked;
             
-            if (lastFreeInput === 'margin') {
-                const targetPct = parseFloat(blendedPctEl.value) || 0;
-                currentCogs = currentPrice * (1 - (targetPct / 100));
-                LOCKS.cogs = true;
-                renderLockInterface();
-                cogsEl.value = Math.round(currentCogs).toLocaleString('id-ID');
-                slCogsEl.value = Math.round(currentCogs);
+            if (priceMode || lastFreeInput === 'margin') {
+                // MODE HARGA: Margin bergerak dinamis (kecuali input margin diubah paksa)
+                if (lastFreeInput === 'margin') {
+                    const targetPct = parseFloat(blendedPctEl.value) || 0;
+                    currentCogs = currentPrice * (1 - (targetPct / 100));
+                    LOCKS.cogs = true; renderLockInterface();
+                    $('in-cogs').value = Math.round(currentCogs).toLocaleString('id-ID');
+                    $('sl-cogs').value = Math.round(currentCogs);
+                } else {
+                    const currentMargin = currentPrice > 0 ? (1 - (currentCogs / currentPrice)) * 100 : 0;
+                    blendedPctEl.value = currentMargin.toFixed(1);
+                }
             } else {
-                const currentMargin = currentPrice > 0 ? (1 - (currentCogs / currentPrice)) * 100 : 0;
-                blendedPctEl.value = currentMargin.toFixed(1);
+                // MODE CROSS-SELL: Margin terkunci, penyesuaian AOV/HPP saling tarik-menarik
+                const targetPct = parseFloat(blendedPctEl.value) || 0;
+                if (lastFreeInput === 'price') {
+                    currentCogs = currentPrice * (1 - (targetPct / 100));
+                    $('in-cogs').value = Math.round(currentCogs).toLocaleString('id-ID');
+                    $('sl-cogs').value = Math.round(currentCogs);
+                } else if (lastFreeInput === 'cogs') {
+                    const newPrice = targetPct < 100 ? currentCogs / (1 - (targetPct / 100)) : currentCogs;
+                    currentPrice = newPrice;
+                    $('in-price').value = Math.round(newPrice).toLocaleString('id-ID');
+                    $('sl-price').value = Math.round(newPrice);
+                }
             }
 
             if (!checkValidationEngine(currentPrice, currentCogs)) { internalMutex = false; return; }
@@ -1689,7 +1711,8 @@
                 const testCogs = currentCogs; // HPP tidak berubah saat mensimulasikan harga di grafik
 
 
-                if (testPrice > dynamicBaselinePrice) {
+                const priceMode = document.getElementById('chk-price-mode').checked;
+                if (priceMode && testPrice > dynamicBaselinePrice) {
                     const priceRatio = testPrice / dynamicBaselinePrice;
                     const smoothedIntervals = Math.log(priceRatio) / Math.log(1.10);
 
@@ -1706,7 +1729,7 @@
                     let baseCR = storedBaselineData.cr;
                     const baseCogs = storedBaselineData.cogs; // Baseline HPP juga statis
 
-                    if (testPrice > storedBaselineData.price) {
+                    if (priceMode && testPrice > storedBaselineData.price) {
                         const priceRatio = testPrice / storedBaselineData.price;
                         const smoothedIntervals = Math.log(priceRatio) / Math.log(1.10);
 
