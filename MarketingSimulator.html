@@ -553,29 +553,29 @@
                 <span id="guide-chevron">▼</span>
             </div>
             <div class="guide-content" id="guide-content">
-                <p>Gunakan alat ini untuk mensimulasikan unit ekonomi bisnis Anda dan menemukan potensi dan rencana keuntungan (Sweet Spot).</p>
+                <p>Gunakan alat ini untuk mensimulasikan unit ekonomi bisnis Anda dan menemukan potensi keuntungan maksimal.</p>
                 
                 <h4>1. Konfigurasi Awal</h4>
                 <ul>
-                    <li>Pilih <strong>Kategori Bisnis</strong> untuk menyesuaikan standar normal industri.</li>
-                    <li>Masukkan data saat ini (Harga jual / AOV, Margin Atau HPP, Traffic, CR).</li>
-                    <li>Klik <strong>Kunci Baseline</strong> untuk membekukan kondisi awal sebagai pembanding (akan muncul angka selisih/delta).</li>
+                    <li>Pilih <strong>Kategori Bisnis</strong> untuk benchmarking konversi industri.</li>
+                    <li>Masukkan data awal (AOV, HPP, Traffic, CR).</li>
+                    <li>Klik <strong>Kunci Baseline</strong> untuk membandingkan eksperimen dengan kondisi riil saat ini.</li>
                 </ul>
 
-                <h4>2. Simulasi & Elastisitas</h4>
+                <h4>2. Simulasi AOV & Mode Harga</h4>
                 <ul>
-                    <li>Geser slider <strong>AOV</strong> untuk melihat dampak perubahan harga. Sistem akan menghitung otomatis penurunan <i>Traffic</i> dan <i>CR</i> berdasarkan hukum elastisitas pasar.</li>
-                    <li>Perhatikan <strong>Shadow Indicators</strong> (teks kecil di bawah label) untuk melihat seberapa jauh penyimpangan dari data awal.</li>
+                    <li><strong>Mode Harga AKTIF:</strong> Kenaikan AOV dianggap sebagai kenaikan harga jual per unit. Berlaku hukum <strong>Elastisitas</strong> (Traffic & CR akan turun otomatis).</li>
+                    <li><strong>Mode Harga MATI (Cross-sell):</strong> AOV naik karena jumlah item per keranjang bertambah. <strong>Margin % Terkunci</strong>, HPP naik proporsional, dan volume tetap stabil.</li>
                 </ul>
 
                 <h4>3. Mencapai Target (Reverse Solver)</h4>
                 <ul>
-                    <li>Jika punya target omset atau profit tertentu, masukkan angkanya di kolom <strong>Target Minimal</strong> dan klik ikon gembok.</li>
-                    <li>Gunakan <strong>Matriks Pareto</strong> (Opsi A, B, atau C) untuk menerapkan strategi otomatis mencapai target tersebut.</li>
+                    <li>Masukkan target profit/omset di kolom <strong>Target Minimal</strong> dan klik gembok.</li>
+                    <li>Gunakan <strong>Matriks Pareto</strong> untuk mengetahui kombinasi Traffic/CR yang paling efisien untuk mencapai target tersebut.</li>
                 </ul>
 
-                <h4>4. Output AI</h4>
-                <p>Setelah simulasi selesai, salin data dari panel <strong>Integrasi AI</strong> ke ChatGPT/Gemini untuk mendapatkan analisis narasi yang mendalam.</p>
+                <h4>4. Konsultasi Strategis AI</h4>
+                <p>Gunakan panel <strong>Integrasi AI</strong> untuk mendapatkan narasi Mega-Prompt yang bisa langsung dikonsultasikan ke ChatGPT/Gemini.</p>
             </div>
         </div>
 
@@ -800,7 +800,7 @@
             </div>
         </div>
 
-            <div class="s"
+            <div class="s" id="chart-card"
                 style="margin-bottom: 0; display: flex; flex-direction: column; justify-content: space-between;">
                 <div>
                     <div class="stitle" style="display: flex; align-items: center; gap: 10px;">
@@ -1674,9 +1674,15 @@
             ownerNetProfitEl.className = m.netProfit < 0 ? 'mv bad' : 'mv good';
 
             renderVisualShadowIndicators(inputs);
-
-            // PERBAIKAN 2: Penyaluran parameter murni aman tanpa interupsi loop DOM
-            updateSweetSpotChart(inputs.price, inputs.cogs, inputs.traffic, inputs.cr, inputs.fixed, inputs.retention, mods.tDrop, mods.crDrop);
+            
+            // Tampilan Grafik hanya jika Mode Harga (Elastisitas) Aktif
+            const chartCard = $('chart-card');
+            if (priceMode) {
+                chartCard.style.display = 'flex';
+                updateSweetSpotChart(inputs.price, inputs.cogs, inputs.traffic, inputs.cr, inputs.fixed, inputs.retention, mods.tDrop, mods.crDrop);
+            } else {
+                chartCard.style.display = 'none';
+            }
 
             renderParetoSection(inputs, m, biz);
             renderComparisonTable(inputs.price, inputs.cogs, inputs.traffic, inputs.cr, m);
@@ -1700,43 +1706,45 @@
             const profitPoints = [];
             const baseProfitPoints = [];
 
-             const currentCogs = cogs; // COGS statis untuk simulasi sweet spot
+            const currentInputs = getRawInputs(); 
+            const priceMode = document.getElementById('chk-price-mode').checked;
 
             for (let i = -4; i <= 4; i++) {
                 const factor = 1 + (i * 0.08);
                 const testPrice = price * factor;
                 let testTraffic = traffic;
                 let testCR = cr;
+                const testCogs = cogs; 
 
-                const testCogs = currentCogs; // HPP tidak berubah saat mensimulasikan harga di grafik
-
-
-                const priceMode = document.getElementById('chk-price-mode').checked;
-                if (priceMode && testPrice > dynamicBaselinePrice) {
+                if (priceMode && isBaselineLocked) {
                     const priceRatio = testPrice / dynamicBaselinePrice;
                     const smoothedIntervals = Math.log(priceRatio) / Math.log(1.10);
 
-                    testTraffic = traffic * (1 - Math.min(0.95, smoothedIntervals * tDrop));
-                    testCR = cr * (1 - Math.min(0.95, smoothedIntervals * crDrop));
+                    testTraffic = Math.max(10, traffic * (1 - (smoothedIntervals * tDrop)));
+                    testCR = Math.max(0.001, cr * (1 - (smoothedIntervals * crDrop)));
                 }
 
-                const gp = calcMetrics(testPrice, testCogs, Math.max(10, testTraffic), Math.max(0.001, testCR), fixed, retention).grossProfit;
+                // Gunakan fungsi calcMetrics yang sudah mencakup Cluster A, B, C secara otomatis
+                const gp = calcMetrics(testPrice, testCogs, Math.max(10, testTraffic), Math.max(0.001, testCR), currentInputs.fixed, retention).grossProfit;
                 pricePoints.push(Math.round(testPrice).toLocaleString('id-ID'));
                 profitPoints.push(gp);
 
                 if (isBaselineLocked) {
                     let baseTraffic = storedBaselineData.traffic;
                     let baseCR = storedBaselineData.cr;
-                    const baseCogs = storedBaselineData.cogs; // Baseline HPP juga statis
+                    const baseCogs = storedBaselineData.cogs;
 
-                    if (priceMode && testPrice > storedBaselineData.price) {
+                    if (priceMode) {
                         const priceRatio = testPrice / storedBaselineData.price;
                         const smoothedIntervals = Math.log(priceRatio) / Math.log(1.10);
 
-                        baseTraffic = storedBaselineData.traffic * (1 - Math.min(0.95, smoothedIntervals * storedBaselineData.tDrop));
-                        baseCR = storedBaselineData.cr * (1 - Math.min(0.95, smoothedIntervals * storedBaselineData.crDrop));
+                        baseTraffic = Math.max(10, storedBaselineData.traffic * (1 - (smoothedIntervals * storedBaselineData.tDrop)));
+                        baseCR = Math.max(0.001, storedBaselineData.cr * (1 - (smoothedIntervals * storedBaselineData.crDrop)));
                     }
-                    const baseGpVal = calcMetrics(testPrice, baseCogs, Math.max(10, baseTraffic), Math.max(0.001, baseCR), storedBaselineData.fixed, storedBaselineData.retention).grossProfit;
+                    
+                    // PENTING: Perhitungan profit baseline harus menggunakan snapshot biaya baseline yang dibekukan
+                    // Kita asumsikan fungsi calcMetrics mengambil variabel global, jadi kita buat simulasi lokal:
+                    const baseGpVal = calcMetricsForBaseline(testPrice, baseCogs, Math.max(10, baseTraffic), Math.max(0.001, baseCR), storedBaselineData);
                     baseProfitPoints.push(baseGpVal);
                 }
             }
@@ -1852,6 +1860,30 @@
                 sweetSpotChart.options.plugins.legend.display = isBaselineLocked;
                 sweetSpotChart.update('none');
             }
+        }
+
+        // Fungsi pembantu khusus untuk menghitung profit kurva baseline secara murni (biaya beku)
+        function calcMetricsForBaseline(price, cogs, traffic, cr, baseData) {
+            const qty = traffic * cr;
+            const totalQty = qty * (1 + baseData.retention);
+            const totalRev = totalQty * price;
+            
+            let mktCost = 0;
+            if (mktTab === 'simple') {
+                mktCost = parseFormattedNum('m-cpc') * traffic; // CPC biasanya dianggap konstan lingkungan
+            } else {
+                // Gunakan persentase fee dari state saat ini (asumsi market rate) 
+                // tapi volume dan base price dari baseline
+                const plat = (parseFloat($('m-plat').value) || 0) / 100;
+                const pgw = (parseFloat($('m-pgw').value) || 0) / 100;
+                const affPct = (parseFloat($('m-aff-pct').value) || 0) / 100;
+                
+                mktCost = (plat + pgw + affPct) * totalRev;
+                mktCost += (parseFormattedNum('m-ship') + parseFormattedNum('m-aff-fix') + parseFormattedNum('m-dist')) * totalQty;
+                mktCost += parseFormattedNum('m-ads') + parseFormattedNum('m-kol');
+            }
+            
+            return totalRev - (totalQty * cogs) - mktCost;
         }
 
         function renderParetoSection(inputs, m, biz) {
