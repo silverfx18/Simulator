@@ -867,7 +867,10 @@
                             <div class="prow"><label style="width:100%">KOL / Event (Rp)</label><input type="text" id="m-kol" value="0" style="width:100%"><span class="sm-info">💡 Biaya endorsement/booth bulanan</span></div>
                             
                             <div class="mc" style="margin-top:10px; background:var(--color-sidebar); border-color:var(--color-primary); text-align:center;">
-                                <div class="ml" style="color:#0c447c">Blended ROAS</div>
+                                <div class="ml" style="color:#0c447c">
+                                    Blended ROAS (MER)
+                                    <span class="tooltip"><i data-lucide="help-circle" style="width:12px; height:12px;"></i><span class="tooltiptext">Marketing Efficiency Ratio: Total Omset dibagi Total Biaya Akuisisi (Ads + KOL).</span></span>
+                                </div>
                                 <div id="roas-val" class="mv" style="font-size:24px; color:#0c447c">0.0x</div>
                             </div>
                         </div>
@@ -2232,15 +2235,20 @@
                         rata_rata_industri_cr_pct: biz.crNorm,
                         estimasi_omset: m.totalRev,
                         gross_profit_marketing: m.grossProfit,
-                        blended_roas: parseFloat(m.roas.toFixed(1)),
+                        blended_roas_mer: parseFloat(m.roas.toFixed(1)),
                         struktur_biaya_marketing: mktData
                     },
                     rekomendasi_sistem: compiledTipsArray.length > 0 ? compiledTipsArray : ["Seluruh metrik saat ini terpantau berada dalam batas wajar industri."],
                     instruksi_analisis_ai: [
                         "Berikan evaluasi mendalam apakah struktur harga (AOV) dan biaya (HPP) sudah memberikan ruang margin yang sehat untuk melakukan scaling.",
                         "Bandingkan performa Skenario Aktif dengan Baseline dan Skenario Eksperimen lainnya untuk menentukan mana yang paling 'feasible' (mudah dijalankan dengan risiko terkontrol).",
-                        "Berdasarkan data ROAS dan perbandingan CR terhadap rata-rata industri, identifikasi di mana kebocoran profit terbesar terjadi.",
+                        "Interpretasikan 'Blended ROAS' sebagai MER (Marketing Efficiency Ratio). Jika angkanya sangat tinggi (>10x), pertimbangkan adanya kontribusi traffic organik yang besar dalam simulasi ini. Jangan hanya memuji efisiensi iklan.",
+                        "Berdasarkan data MER dan perbandingan CR terhadap rata-rata industri, identifikasi di mana kebocoran profit terbesar terjadi.",
                         "Berikan 3 langkah taktis prioritas yang harus dilakukan pemilik bisnis minggu ini untuk meningkatkan laba bersih tanpa harus menaikkan budget iklan secara drastis."
+                    ],
+                    perintah_tambahan: [
+                        "Gunakan framework SWOT atau Funnel Audit dalam analisismu.",
+                        "Sajikan output dalam poin-poin yang mudah dieksekusi (Actionable)."
                     ],
                     metadata: { timestamp: new Date().toISOString() },
                     baseline: isBaselineLocked ? storedBaselineData : null,
@@ -2260,7 +2268,7 @@ ${baselineSummaryText}DATA METRIK BISNIS SAAT INI (SKENARIO AKTIF):
 - Retensi Pelanggan: ${fmtP(inputs.retention * 100)}
 - Estimasi Omset: ${fmt(m.totalRev)}
 - Gross Profit: ${fmt(m.grossProfit)}
-- Blended ROAS: ${m.roas.toFixed(1)}x
+- Blended ROAS (MER): ${m.roas.toFixed(1)}x
 
 STRUKTUR BIAYA MARKETING:
 ${mktInfo}
@@ -2271,8 +2279,11 @@ ${compiledTipsText || "Seluruh metrik saat ini terpantau berada dalam batas waja
 INSTRUKSI ANALISIS UNTUK AI:
 1. Berikan evaluasi mendalam apakah struktur harga (AOV) dan biaya (HPP) sudah memberikan ruang margin yang sehat untuk melakukan scaling.
 2. Bandingkan performa Skenario Aktif dengan Baseline dan skenario yang disimpan. Mana yang paling logis dan memungkinkan untuk dieksekusi tim di lapangan (feasible) berdasarkan perubahan Traffic dan CR yang dibutuhkan?
-3. Berdasarkan data ROAS dan perbandingan CR terhadap rata-rata industri, identifikasi di mana kebocoran profit terbesar terjadi.
-4. Berikan 3 langkah taktis prioritas yang harus dilakukan pemilik bisnis minggu ini untuk meningkatkan laba bersih tanpa harus menaikkan budget iklan secara drastis.`;
+3. Interpretasikan 'Blended ROAS' sebagai MER (Marketing Efficiency Ratio). Jika angkanya sangat tinggi (>10x), pertimbangkan faktor kontribusi traffic organik yang dominan.
+4. Berdasarkan data MER dan perbandingan CR terhadap rata-rata industri, identifikasi di mana kebocoran profit terbesar terjadi.
+5. Berikan 3 langkah taktis prioritas yang harus dilakukan pemilik bisnis minggu ini untuk meningkatkan laba bersih tanpa harus menaikkan budget iklan secara drastis.
+
+Gunakan framework Funnel Audit dalam analisismu dan sajikan output dalam poin-poin yang mudah dieksekusi (Actionable).`;
             }
 
             // RENDER OWNER EXCLUSIVE REPORT
@@ -2296,39 +2307,50 @@ INSTRUKSI ANALISIS UNTUK AI:
                         aov: inputs.price,
                         gross_profit: m.grossProfit,
                         total_unit_terjual: m.totalQty,
-                        roas: parseFloat(m.roas.toFixed(1)),
+                        blended_roas_mer: parseFloat(m.roas.toFixed(1)),
                         struktur_biaya_marketing: mktData
                     },
                     temuan_owner_tool: ownerTipsElements.trim() || "Struktur biaya tetap tertutup dengan aman oleh profit operasional.",
+                    rekomendasi_sistem_marketing: compiledTipsArray,
+                    baseline: isBaselineLocked ? storedBaselineData : null,
+                    saved_scenarios: savedScenarios,
                     instruksi_analisis_finansial: [
-                        "Analisis apakah laba bersih saat ini sudah ideal dibandingkan dengan risiko biaya tetap yang ditanggung.",
-                        "Evaluasi kapasitas perusahaan untuk melakukan ekspansi atau pembagian dividen berdasarkan sisa laba bersih.",
+                        "Bandingkan performa finansial Skenario Aktif dengan Baseline dan skenario tersimpan lainnya. Apakah strategi ini memberikan pertumbuhan laba yang sehat dan berkelanjutan?",
+                        "Analisis apakah laba bersih saat ini sudah ideal dibandingkan dengan risiko biaya tetap (overhead) yang ditanggung.",
+                        "Evaluasi kapasitas perusahaan untuk melakukan ekspansi, reinvestasi ke marketing, atau pembagian dividen.",
                         "Berikan saran mengenai efisiensi biaya tetap (overhead) dan bagaimana dampaknya terhadap penurunan harga jual (Price War) jika diperlukan."
-                    ]
+                    ],
+                    focus: "Business Sustainability & Shareholder Value"
                 };
                 ownerBox.textContent = JSON.stringify(ownerJsonData, null, 2);
             } else {
                 ownerBox.textContent = `Bertindaklah sebagai Chief Financial Officer (CFO) dan Strategic Business Owner. Gunakan data finansial makro di bawah ini untuk menganalisis keberlanjutan bisnis dan efisiensi struktur biaya.
 
-RINGKASAN EKSEKUTIF FINANSIAL:
+${baselineSummaryText}RINGKASAN EKSEKUTIF FINANSIAL (SKENARIO AKTIF):
 - Biaya Tetap (Overhead): ${fmt(inputs.fixed)}
 - Bisnis: ${bizDetail}
 - Laba Bersih (Net Profit): ${fmt(m.netProfit)}
 - Harga Jual (AOV): ${fmt(inputs.price)}
 - Gross Profit: ${fmt(m.grossProfit)}
 - Total Unit Terjual: ${fmtN(m.totalQty)} unit
-- Blended ROAS: ${m.roas.toFixed(1)}x
+- Blended ROAS (MER): ${m.roas.toFixed(1)}x
 
 DETAIL BIAYA MARKETING:
 ${mktInfo}
+
+${savedScenariosText}TEMUAN & REKOMENDASI SISTEM:
+${compiledTipsText || "Seluruh metrik operasional terpantau berada dalam batas wajar industri."}
 
 TEMUAN OWNER'S ADVISORY TOOL:
 ${ownerTipsElements.trim() || "Struktur biaya operasional terpantau sehat dan menutup seluruh beban tetap."}
 
 INSTRUKSI ANALISIS STRATEGIS OWNER:
-1. Analisis ketahanan bisnis terhadap fluktuasi biaya tetap. Apakah margin kontribusi saat ini sudah cukup aman untuk menyerap kenaikan biaya overhead (seperti sewa atau gaji) di masa depan?
-2. Berdasarkan Net Profit yang dihasilkan, berikan saran apakah laba sebaiknya diinvestasikan kembali ke marketing (Klaster C) atau digunakan untuk penguatan cadangan kas perusahaan.
-3. Identifikasi skenario 'Worst Case' berdasarkan angka Breakeven yang ada; berapa penurunan traffic maksimal yang bisa ditoleransi sebelum perusahaan mengalami kerugian bersih?`;
+1. Bandingkan performa finansial Skenario Aktif dengan Baseline dan skenario tersimpan lainnya. Apakah peningkatan laba bersih sebanding dengan perubahan budget atau target traffic yang ditetapkan?
+2. Analisis ketahanan bisnis terhadap fluktuasi biaya tetap. Apakah margin kontribusi saat ini sudah cukup aman untuk menyerap kenaikan biaya overhead (seperti sewa atau gaji) di masa depan?
+3. Berdasarkan Net Profit yang dihasilkan, berikan saran apakah laba sebaiknya diinvestasikan kembali ke marketing (Klaster C) untuk pertumbuhan, atau digunakan untuk penguatan cadangan kas perusahaan.
+4. Identifikasi skenario 'Worst Case' berdasarkan angka Breakeven yang ada; berapa penurunan traffic maksimal yang bisa ditoleransi sebelum perusahaan mengalami kerugian bersih?
+
+Fokuslah pada Business Sustainability dan Shareholder Value dalam memberikan rekomendasi.`;
             }
         }
 
